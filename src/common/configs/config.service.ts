@@ -28,4 +28,8 @@ export class ConfigService {
   get appName(): string {
     return get('APP_NAME').required().asString();
   }
+
+  get isProduction(): boolean {
+    return get('NODE_ENV').required().asString() === 'production';
+  }
 }
