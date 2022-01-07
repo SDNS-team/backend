@@ -1,16 +1,16 @@
 {
-  "root": "apps/backend",
-  "sourceRoot": "apps/backend/src",
+  "root": "apps/friends",
+  "sourceRoot": "apps/friends/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/backend",
-        "main": "apps/backend/src/main.ts",
-        "tsConfig": "apps/backend/tsconfig.app.json",
-        "assets": ["apps/backend/src/assets"]
+        "outputPath": "dist/apps/friends",
+        "main": "apps/friends/src/main.ts",
+        "tsConfig": "apps/friends/tsconfig.app.json",
+        "assets": ["apps/friends/src/assets"]
       },
       "configurations": {
         "production": {
@@ -19,8 +19,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/backend/src/environments/environment.ts",
-              "with": "apps/backend/src/environments/environment.prod.ts"
+              "replace": "apps/friends/src/environments/environment.ts",
+              "with": "apps/friends/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -29,21 +29,21 @@
     "serve": {
       "executor": "@nrwl/node:execute",
       "options": {
-        "buildTarget": "backend:build"
+        "buildTarget": "friends:build"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/backend/**/*.ts"]
+        "lintFilePatterns": ["apps/friends/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/backend"],
+      "outputs": ["coverage/apps/friends"],
       "options": {
-        "jestConfig": "apps/backend/jest.config.js",
+        "jestConfig": "apps/friends/jest.config.js",
         "passWithNoTests": true
       }
     }
