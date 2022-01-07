@@ -6,7 +6,6 @@ import {
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import compress from 'fastify-compress';
-import helmet from 'fastify-helmet';
 import fastifyMultipart from 'fastify-multipart';
 import { AppModule } from './app.module';
 import { ConfigService } from './common/configs/config.service';
@@ -31,7 +30,16 @@ async function bootstrap() {
     });
   }
 
-  app.register(helmet);
+  // app.register(helmet, {
+  //   contentSecurityPolicy: {
+  //     directives: {
+  //       defaultSrc: [`'self'`],
+  //       styleSrc: [`'self'`, `'unsafe-inline'`],
+  //       imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
+  //       scriptSrc: [`'self'`, `'unsafe-inline'`],
+  //     },
+  //   },
+  // });
   app.register(compress);
   app.register(fastifyMultipart);
   app.useGlobalPipes(
