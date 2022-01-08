@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { FindManyFriendArgs } from '../@generated/friend/find-many-friend.args';
+import { FindManyFriendArgs } from '../../../gateway/src/@generated/friend/find-many-friend.args';
 import { FriendService } from './friend.service';
 
 @Controller('friends')

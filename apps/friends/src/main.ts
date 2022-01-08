@@ -1,20 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { join } from 'path';
+import { MicroserviceOptions } from '@nestjs/microservices';
 import { AppModule } from './app.module';
+import { ConfigService } from './common/configs/config.service';
 
 async function bootstrap() {
+  const configService: ConfigService = new ConfigService();
+
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
-    {
-      transport: Transport.GRPC,
-      options: {
-        url: `0.0.0.0:4001`,
-        package: 'friend',
-        protoPath: join(__dirname, '../gateway/assets/__proto/friend.proto'),
-        loader: { keepCase: true },
-      },
-    },
+    configService.microserviceOptions,
   );
 
   await app.listen();
