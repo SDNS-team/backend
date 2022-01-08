@@ -6,7 +6,7 @@ import * as path from 'path';
 import { join } from 'path';
 
 dotenv.config({
-  path: path.join(__dirname, '../../../../../.env'),
+  path: path.join(__dirname, '.env'),
 });
 
 @Injectable()

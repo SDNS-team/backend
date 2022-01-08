@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { ClientOptions, Transport } from '@nestjs/microservices';
 import * as dotenv from 'dotenv';
 import { get } from 'env-var';
 import * as path from 'path';
+import { join } from 'path';
 
 dotenv.config({
-  path: path.join(__dirname, '../../../../../.env'),
+  path: path.join(__dirname, '.env'),
 });
 
 @Injectable()
@@ -31,5 +33,19 @@ export class ConfigService {
 
   get isProduction(): boolean {
     return get('NODE_ENV').required().asString() === 'production';
+  }
+
+  get friendMicroserviceOptions(): ClientOptions {
+    return {
+      transport: Transport.GRPC,
+      options: {
+        url: `${get('FRIEND_HOST').required().asString()}:${get('FRIEND_PORT')
+          .required()
+          .asPortNumber()}`,
+        package: 'friend',
+        protoPath: join(__dirname, 'assets/__proto/friend.proto'),
+        loader: { keepCase: true },
+      },
+    };
   }
 }

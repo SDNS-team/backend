@@ -1,15 +1,19 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule } from '@nestjs/microservices';
-import { grpcClientOptions } from '../grpc-client.options';
+import { ConfigModule } from '../common/configs/config.module';
+import { ConfigService } from '../common/configs/config.service';
 import { FriendResolver } from './friend.resolver';
 import { FriendAppService } from './friend.service';
 
 @Module({
   imports: [
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'FRIEND_PACKAGE',
-        ...grpcClientOptions,
+        useFactory: (configService: ConfigService) =>
+          configService.friendMicroserviceOptions,
+        inject: [ConfigService],
+        imports: [ConfigModule],
       },
     ]),
   ],
