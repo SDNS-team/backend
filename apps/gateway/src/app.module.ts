@@ -13,7 +13,7 @@ import { FriendModule } from './friends/friend.module';
       debug: true,
       playground: true,
       disableHealthCheck: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: join(__dirname, 'src/schema.gql'),
       formatError: (error: GraphQLError) => {
         return {
           message: error.message,
@@ -23,7 +23,6 @@ import { FriendModule } from './friends/friend.module';
       },
     }),
   ],
-  controllers: [],
   providers: [ConfigService],
 })
 export class AppModule {}
