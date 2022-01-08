@@ -17,9 +17,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type FriendResponse {
+  values: [Friend!]
+}
+
 type Query {
-  friends(where: FriendWhereInput, orderBy: [FriendOrderByWithRelationInput!], cursor: FriendWhereUniqueInput, take: Int, skip: Int, distinct: [FriendScalarFieldEnum!]): [Friend!]!
-  friendUnique(where: FriendWhereUniqueInput!): Friend!
+  friends(where: FriendWhereInput, orderBy: [FriendOrderByWithRelationInput!], cursor: FriendWhereUniqueInput, take: Int, skip: Int, distinct: [FriendScalarFieldEnum!]): FriendResponse!
 }
 
 input FriendWhereInput {
@@ -157,18 +160,4 @@ enum FriendScalarFieldEnum {
   name
   birthday
   description
-}
-
-type Mutation {
-  createFriend(createFriend: FriendCreateInput!): Friend!
-}
-
-input FriendCreateInput {
-  id: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  deleted: Boolean
-  name: String!
-  birthday: DateTime!
-  description: String
 }

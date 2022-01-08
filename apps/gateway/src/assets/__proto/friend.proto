@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package friend;
+
+import "google/protobuf/timestamp.proto";
+
+service FriendService {
+  rpc FindMany (FindManyQuery) returns (FindManyResponse);
+}
+
+message FindManyQuery {
+  int32 take = 1;
+}
+
+message FindManyResponse {
+  repeated Friend values = 1;
+}
+
+message Friend {
+  string id = 1;
+  string createdAt = 2;
+  string updatedAt = 3;
+  bool deleted = 4;
+  string name = 5;
+  string birthday = 6;
+  optional string description = 7;
+}
