@@ -7,11 +7,11 @@ services:
     env_file:
       - .env
     ports:
-      - '${FRIENDS_DATABASE_PORT}:5432'
+      - '${DATABASE_PORT}:5432'
     environment:
-      POSTGRES_PASSWORD: ${FRIENDS_DATABASE_PASSWORD}
-      POSTGRES_USER: ${FRIENDS_DATABASE_USERNAME}
-      POSTGRES_DB: ${FRIENDS_DATABASE_NAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_DB: ${DATABASE_NAME}
     volumes:
       - /home/birthdayapp/docker_data/db-data/local:/var/lib/postgresql/data
       - ./scripts/postgres:/docker-entrypoint-initdb.d
