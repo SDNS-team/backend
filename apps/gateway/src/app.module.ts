@@ -4,11 +4,9 @@ import { GraphQLError } from 'graphql';
 import { join } from 'path';
 import { ConfigService } from './common/configs/config.service';
 import { FriendModule } from './friends/friend.module';
-import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
-    PrismaModule,
     FriendModule,
     GraphQLModule.forRoot({
       include: [FriendModule],
