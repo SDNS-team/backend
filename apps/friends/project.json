@@ -42,7 +42,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/friends"],
       "options": {
-        "jestConfig": "apps/friends/jest.config.js",
+        "jestConfig": "apps/friends/jest.config.ts",
         "passWithNoTests": true
       }
     }

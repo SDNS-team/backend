@@ -1,8 +1,8 @@
 module.exports = {
   displayName: 'friends',
   rootDir: 'src',
-  testRegex: '.*\\.spec\\.ts$',
-  preset: '../../jest.preset.js',
+  testMatch: ['.*\\.spec\\.ts$'],
+  preset: '../../../jest.preset.ts',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
