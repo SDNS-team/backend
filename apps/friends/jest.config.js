@@ -1,5 +1,7 @@
 module.exports = {
   displayName: 'friends',
+  rootDir: 'src',
+  testRegex: '.*\\.spec\\.ts$',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -8,8 +10,9 @@ module.exports = {
   },
   testEnvironment: 'node',
   transform: {
-    '^.+\\.[tj]s$': 'ts-jest',
+    '^.+\\.(t|j)s$': 'ts-jest',
   },
-  moduleFileExtensions: ['ts', 'js', 'html'],
+  collectCoverageFrom: ['**/*.(t|j)s'],
+  moduleFileExtensions: ['ts', 'js', 'json'],
   coverageDirectory: '../../coverage/apps/friends',
 };
