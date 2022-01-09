@@ -19,7 +19,6 @@
     "@nestjs/platform-fastify": "^8.2.4",
     "@nestjs/swagger": "^5.1.5",
     "@prisma/client": "^3.7.0",
-    "@vegardit/prisma-generator-nestjs-dto": "^1.4.1",
     "apollo-server-fastify": "^3.6.1",
     "dotenv": "^10.0.0",
     "env-var": "^7.1.1",

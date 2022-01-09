@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator client {
   provider      = "prisma-client-js"
-  output        = "../../../node_modules/@prisma/client/generated/friend"
+  output        = "../../../node_modules/@prisma/client/generated/user"
   binaryTargets = ["debian-openssl-1.1.x", "rhel-openssl-1.0.x", "rhel-openssl-1.1.x", "native"]
 }
 
@@ -16,12 +16,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Friend {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  deleted     Boolean  @default(false)
-  name        String
-  birthday    DateTime
-  description String?
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+  name      String
 }

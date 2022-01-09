@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package user;
+
+import "google/protobuf/timestamp.proto";
+
+service UserService {
+  rpc FindMany (FindManyQuery) returns (FindManyResponse);
+}
+
+message FindManyQuery {
+  int32 take = 1;
+}
+
+message FindManyResponse {
+  repeated User values = 1;
+}
+
+message User {
+  string id = 1;
+  string createdAt = 2;
+  string updatedAt = 3;
+  bool deleted = 4;
+  string name = 5;
+}
