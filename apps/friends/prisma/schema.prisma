@@ -29,6 +29,4 @@ model Friend {
   name        String
   birthday    DateTime
   description String?
-
-  @@map("friends")
 }

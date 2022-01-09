@@ -41,7 +41,7 @@ export class ConfigService {
       options: {
         url: `${this.host}:${this.port}`,
         package: 'friend',
-        protoPath: join(__dirname, '../gateway/assets/__proto/friend.proto'),
+        protoPath: join(__dirname, './assets/__proto/friend.proto'),
         loader: { keepCase: true },
       },
     };

@@ -9,7 +9,8 @@
       "options": {
         "outputPath": "dist/apps/friends",
         "main": "apps/friends/src/main.ts",
-        "tsConfig": "apps/friends/tsconfig.app.json"
+        "tsConfig": "apps/friends/tsconfig.app.json",
+        "assets": ["apps/friends/src/assets"]
       },
       "configurations": {
         "production": {
