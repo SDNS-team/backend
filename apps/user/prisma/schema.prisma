@@ -17,9 +17,19 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deleted   Boolean  @default(false)
-  name      String
+  id           String            @id @default(uuid())
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  deleted      Boolean           @default(false)
+  name         String?
+  provider     AuthProviderEnum?
+  providerId   String?           @unique
+  email        String            @unique
+  refreshToken String?           @unique
+}
+
+enum AuthProviderEnum {
+  GOOGLE
+  FACEBOOK
+  APPLE
 }

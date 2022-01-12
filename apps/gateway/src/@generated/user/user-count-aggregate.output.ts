@@ -21,5 +21,17 @@ export class UserCountAggregate {
     name!: number;
 
     @Field(() => Int, {nullable:false})
+    provider!: number;
+
+    @Field(() => Int, {nullable:false})
+    providerId!: number;
+
+    @Field(() => Int, {nullable:false})
+    email!: number;
+
+    @Field(() => Int, {nullable:false})
+    refreshToken!: number;
+
+    @Field(() => Int, {nullable:false})
     _all!: number;
 }

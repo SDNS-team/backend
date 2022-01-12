@@ -3,6 +3,8 @@ import { InputType } from '@nestjs/graphql';
 import { StringFilter } from '../prisma/string-filter.input';
 import { DateTimeFilter } from '../prisma/date-time-filter.input';
 import { BoolFilter } from '../prisma/bool-filter.input';
+import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
+import { EnumAuthProviderEnumNullableFilter } from '../prisma/enum-auth-provider-enum-nullable-filter.input';
 
 @InputType()
 export class UserWhereInput {
@@ -28,6 +30,18 @@ export class UserWhereInput {
     @Field(() => BoolFilter, {nullable:true})
     deleted?: BoolFilter;
 
+    @Field(() => StringNullableFilter, {nullable:true})
+    name?: StringNullableFilter;
+
+    @Field(() => EnumAuthProviderEnumNullableFilter, {nullable:true})
+    provider?: EnumAuthProviderEnumNullableFilter;
+
+    @Field(() => StringNullableFilter, {nullable:true})
+    providerId?: StringNullableFilter;
+
     @Field(() => StringFilter, {nullable:true})
-    name?: StringFilter;
+    email?: StringFilter;
+
+    @Field(() => StringNullableFilter, {nullable:true})
+    refreshToken?: StringNullableFilter;
 }

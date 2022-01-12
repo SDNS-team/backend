@@ -6,4 +6,13 @@ export class UserWhereUniqueInput {
 
     @Field(() => String, {nullable:true})
     id?: string;
+
+    @Field(() => String, {nullable:true})
+    providerId?: string;
+
+    @Field(() => String, {nullable:true})
+    email?: string;
+
+    @Field(() => String, {nullable:true})
+    refreshToken?: string;
 }

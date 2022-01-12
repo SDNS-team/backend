@@ -11,6 +11,7 @@ dotenv.config({
 
 @Injectable()
 export class ConfigService {
+  // TODO: проверять required() во время загрузки
   get nodeEnv(): string {
     return get('NODE_ENV').required().asString();
   }

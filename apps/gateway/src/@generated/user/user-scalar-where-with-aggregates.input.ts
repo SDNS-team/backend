@@ -3,6 +3,8 @@ import { InputType } from '@nestjs/graphql';
 import { StringWithAggregatesFilter } from '../prisma/string-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../prisma/date-time-with-aggregates-filter.input';
 import { BoolWithAggregatesFilter } from '../prisma/bool-with-aggregates-filter.input';
+import { StringNullableWithAggregatesFilter } from '../prisma/string-nullable-with-aggregates-filter.input';
+import { EnumAuthProviderEnumNullableWithAggregatesFilter } from '../prisma/enum-auth-provider-enum-nullable-with-aggregates-filter.input';
 
 @InputType()
 export class UserScalarWhereWithAggregatesInput {
@@ -28,6 +30,18 @@ export class UserScalarWhereWithAggregatesInput {
     @Field(() => BoolWithAggregatesFilter, {nullable:true})
     deleted?: BoolWithAggregatesFilter;
 
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    name?: StringNullableWithAggregatesFilter;
+
+    @Field(() => EnumAuthProviderEnumNullableWithAggregatesFilter, {nullable:true})
+    provider?: EnumAuthProviderEnumNullableWithAggregatesFilter;
+
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    providerId?: StringNullableWithAggregatesFilter;
+
     @Field(() => StringWithAggregatesFilter, {nullable:true})
-    name?: StringWithAggregatesFilter;
+    email?: StringWithAggregatesFilter;
+
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    refreshToken?: StringNullableWithAggregatesFilter;
 }

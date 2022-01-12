@@ -2,7 +2,7 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { FindManyFriendArgs } from '../@generated/friend/find-many-friend.args';
-import { FriendResponse } from '../@generated/friend/friend.model';
+import { FriendResponse } from './models/friend.model';
 
 interface FriendService {
   findMany(args: FindManyFriendArgs): Observable<FriendResponse>;

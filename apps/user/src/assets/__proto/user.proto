@@ -6,6 +6,51 @@ import "google/protobuf/timestamp.proto";
 
 service UserService {
   rpc FindMany (FindManyQuery) returns (FindManyResponse);
+  rpc FindFirst (FindFirstQuery) returns (User);
+  rpc Create (CreateOneUserArgs) returns (User);
+  rpc Update (UpdateOneUserArgs) returns (User);
+}
+
+message UpdateOneUserArgs {
+  UserUpdateInput data = 1;
+  UserWhereUniqueInput where = 2;
+}
+
+message UserUpdateInput {
+  NullableStringFieldUpdateOperationsInput refreshToken = 1;
+}
+
+message NullableStringFieldUpdateOperationsInput {
+  string set = 1;
+}
+
+message UserWhereUniqueInput {
+  string id = 1;
+}
+
+message CreateOneUserArgs {
+  UserCreateInput data = 1;
+}
+
+message UserCreateInput {
+  string name = 1;
+  string provider = 2;
+  string providerId = 3;
+  string email = 4;
+}
+
+
+message FindFirstQuery {
+  UserWhereInput where = 1;
+}
+
+message UserWhereInput {
+  Filter provider = 1;
+  Filter providerId = 2;
+}
+
+message Filter {
+  string equals = 1;
 }
 
 message FindManyQuery {
@@ -17,9 +62,9 @@ message FindManyResponse {
 }
 
 message User {
-  string id = 1;
-  string createdAt = 2;
-  string updatedAt = 3;
-  bool deleted = 4;
-  string name = 5;
+  optional string id = 1;
+  optional string createdAt = 2;
+  optional string updatedAt = 3;
+  optional bool deleted = 4;
+  optional string name = 5;
 }

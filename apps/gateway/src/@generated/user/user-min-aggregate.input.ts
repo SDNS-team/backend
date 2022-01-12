@@ -18,4 +18,16 @@ export class UserMinAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
     name?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    provider?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    providerId?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    email?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    refreshToken?: true;
 }

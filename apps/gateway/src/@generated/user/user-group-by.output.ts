@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
+import { AuthProviderEnum } from '../prisma/auth-provider.enum';
 import { UserCountAggregate } from './user-count-aggregate.output';
 import { UserMinAggregate } from './user-min-aggregate.output';
 import { UserMaxAggregate } from './user-max-aggregate.output';
@@ -19,8 +20,20 @@ export class UserGroupBy {
     @Field(() => Boolean, {nullable:false})
     deleted!: boolean;
 
+    @Field(() => String, {nullable:true})
+    name?: string;
+
+    @Field(() => AuthProviderEnum, {nullable:true})
+    provider?: keyof typeof AuthProviderEnum;
+
+    @Field(() => String, {nullable:true})
+    providerId?: string;
+
     @Field(() => String, {nullable:false})
-    name!: string;
+    email!: string;
+
+    @Field(() => String, {nullable:true})
+    refreshToken?: string;
 
     @Field(() => UserCountAggregate, {nullable:true})
     _count?: UserCountAggregate;
