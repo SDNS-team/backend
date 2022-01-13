@@ -29,7 +29,7 @@ export class UserCountAggregateInput {
     email?: true;
 
     @Field(() => Boolean, {nullable:true})
-    refreshToken?: true;
+    hashRefreshToken?: true;
 
     @Field(() => Boolean, {nullable:true})
     _all?: true;

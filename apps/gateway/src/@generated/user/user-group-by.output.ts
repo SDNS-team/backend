@@ -33,7 +33,7 @@ export class UserGroupBy {
     email!: string;
 
     @Field(() => String, {nullable:true})
-    refreshToken?: string;
+    hashRefreshToken?: string;
 
     @Field(() => UserCountAggregate, {nullable:true})
     _count?: UserCountAggregate;

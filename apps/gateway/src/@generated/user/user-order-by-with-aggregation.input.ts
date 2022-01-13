@@ -33,7 +33,7 @@ export class UserOrderByWithAggregationInput {
     email?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
-    refreshToken?: keyof typeof SortOrder;
+    hashRefreshToken?: keyof typeof SortOrder;
 
     @Field(() => UserCountOrderByAggregateInput, {nullable:true})
     _count?: UserCountOrderByAggregateInput;

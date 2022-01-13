@@ -1,7 +1,9 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 import { FindManyFriendArgs } from '../@generated/friend/find-many-friend.args';
 import { FriendResponse } from '../@generated/friend/friend.model';
+import { GqlAuthGuard } from '../auth/graphql/gql-auth.guard';
 import { FriendAppService } from './friend.service';
 
 @Resolver(() => FriendResponse)
@@ -15,6 +17,7 @@ export class FriendResolver {
   //   });
   // }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => FriendResponse, { name: 'friends' })
   async findMany(
     @Args() args: FindManyFriendArgs,

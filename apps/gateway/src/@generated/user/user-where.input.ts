@@ -43,5 +43,5 @@ export class UserWhereInput {
     email?: StringFilter;
 
     @Field(() => StringNullableFilter, {nullable:true})
-    refreshToken?: StringNullableFilter;
+    hashRefreshToken?: StringNullableFilter;
 }

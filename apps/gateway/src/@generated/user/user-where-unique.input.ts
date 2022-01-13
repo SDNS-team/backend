@@ -14,5 +14,5 @@ export class UserWhereUniqueInput {
     email?: string;
 
     @Field(() => String, {nullable:true})
-    refreshToken?: string;
+    hashRefreshToken?: string;
 }

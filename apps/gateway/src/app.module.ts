@@ -13,7 +13,7 @@ import { UserModule } from './user/user.module';
     FriendModule,
     UserModule,
     GraphQLModule.forRoot({
-      include: [FriendModule, UserModule],
+      include: [FriendModule, UserModule, AuthModule],
       debug: true,
       playground: true,
       disableHealthCheck: true,

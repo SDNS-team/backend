@@ -17,7 +17,7 @@ message UpdateOneUserArgs {
 }
 
 message UserUpdateInput {
-  NullableStringFieldUpdateOperationsInput refreshToken = 1;
+  NullableStringFieldUpdateOperationsInput hashRefreshToken = 1;
 }
 
 message NullableStringFieldUpdateOperationsInput {
@@ -67,4 +67,5 @@ message User {
   optional string updatedAt = 3;
   optional bool deleted = 4;
   optional string name = 5;
+  optional string hashRefreshToken = 6;
 }

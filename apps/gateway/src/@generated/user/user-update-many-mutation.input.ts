@@ -34,5 +34,5 @@ export class UserUpdateManyMutationInput {
     email?: StringFieldUpdateOperationsInput;
 
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    refreshToken?: NullableStringFieldUpdateOperationsInput;
+    hashRefreshToken?: NullableStringFieldUpdateOperationsInput;
 }

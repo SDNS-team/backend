@@ -27,7 +27,7 @@ export class GoogleController {
       throw new UnauthorizedException();
     }
 
-    const tokens = await this.tokenService.login(req.user);
+    const tokens = await this.tokenService.login(req.user); // TODO: Пофиксить тип
     res.send(tokens);
     return tokens;
   }

@@ -31,5 +31,5 @@ export class User {
     email!: string;
 
     @Field(() => String, {nullable:true})
-    refreshToken!: string | null;
+    hashRefreshToken!: string | null;
 }

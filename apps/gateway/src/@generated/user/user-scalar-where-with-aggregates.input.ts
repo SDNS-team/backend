@@ -43,5 +43,5 @@ export class UserScalarWhereWithAggregatesInput {
     email?: StringWithAggregatesFilter;
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
-    refreshToken?: StringNullableWithAggregatesFilter;
+    hashRefreshToken?: StringNullableWithAggregatesFilter;
 }

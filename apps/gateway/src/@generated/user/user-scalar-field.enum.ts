@@ -9,7 +9,7 @@ export enum UserScalarFieldEnum {
     provider = "provider",
     providerId = "providerId",
     email = "email",
-    refreshToken = "refreshToken"
+    hashRefreshToken = "hashRefreshToken"
 }
 
 

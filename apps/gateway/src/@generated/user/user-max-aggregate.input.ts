@@ -29,5 +29,5 @@ export class UserMaxAggregateInput {
     email?: true;
 
     @Field(() => Boolean, {nullable:true})
-    refreshToken?: true;
+    hashRefreshToken?: true;
 }

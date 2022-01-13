@@ -30,7 +30,7 @@ export class UserCountAggregate {
     email!: number;
 
     @Field(() => Int, {nullable:false})
-    refreshToken!: number;
+    hashRefreshToken!: number;
 
     @Field(() => Int, {nullable:false})
     _all!: number;

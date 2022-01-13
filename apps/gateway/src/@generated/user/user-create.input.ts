@@ -30,5 +30,5 @@ export class UserCreateInput {
     email!: string;
 
     @Field(() => String, {nullable:true})
-    refreshToken?: string;
+    hashRefreshToken?: string;
 }

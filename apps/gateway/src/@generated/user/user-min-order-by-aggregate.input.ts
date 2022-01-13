@@ -30,5 +30,5 @@ export class UserMinOrderByAggregateInput {
     email?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
-    refreshToken?: keyof typeof SortOrder;
+    hashRefreshToken?: keyof typeof SortOrder;
 }

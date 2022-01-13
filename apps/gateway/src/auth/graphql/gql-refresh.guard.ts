@@ -1,9 +1,9 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { JwtGuard } from '../token/jwt.guard';
+import { RefreshGuard } from '../token/refresh.guard';
 
 @Injectable()
-export class GqlAuthGuard extends JwtGuard {
+export class GqlRefreshGuard extends RefreshGuard {
   getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context);
     return ctx.getContext().req;

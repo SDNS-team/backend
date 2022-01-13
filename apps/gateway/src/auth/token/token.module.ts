@@ -5,6 +5,7 @@ import { ConfigModule } from '../../common/configs/config.module';
 import { ConfigService } from '../../common/configs/config.service';
 import { UserService } from '../../user/user.service';
 import { JwtStrategy } from './jwt.strategy';
+import { RefreshStrategy } from './refresh.strategy';
 import { TokenService } from './token.service';
 
 @Module({
@@ -25,7 +26,13 @@ import { TokenService } from './token.service';
       },
     ]),
   ],
-  providers: [ConfigService, JwtStrategy, TokenService, UserService],
+  providers: [
+    ConfigService,
+    JwtStrategy,
+    RefreshStrategy,
+    TokenService,
+    UserService,
+  ],
   exports: [TokenService],
 })
 export class TokenModule {}

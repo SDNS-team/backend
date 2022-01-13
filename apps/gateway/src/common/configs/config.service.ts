@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { JwtModuleOptions } from '@nestjs/jwt';
+import { JwtModuleOptions, JwtSignOptions } from '@nestjs/jwt';
 import { ClientOptions, Transport } from '@nestjs/microservices';
 import * as dotenv from 'dotenv';
 import { get } from 'env-var';
@@ -79,6 +79,21 @@ export class ConfigService {
       ignoreExpiration: false,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: get('JWT_SECRET').required().asString(),
+    };
+  }
+
+  get refreshStrategyOptions(): StrategyOptions {
+    return {
+      ignoreExpiration: true,
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: get('REFRESH_SECRET').required().asString(),
+      passReqToCallback: true,
+    };
+  }
+
+  get refreshSignOptions(): JwtSignOptions {
+    return {
+      secret: get('REFRESH_SECRET').required().asString(),
     };
   }
 }

@@ -30,5 +30,5 @@ export class UserMaxAggregate {
     email?: string;
 
     @Field(() => String, {nullable:true})
-    refreshToken?: string;
+    hashRefreshToken?: string;
 }

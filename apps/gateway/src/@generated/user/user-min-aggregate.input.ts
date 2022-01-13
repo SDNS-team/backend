@@ -29,5 +29,5 @@ export class UserMinAggregateInput {
     email?: true;
 
     @Field(() => Boolean, {nullable:true})
-    refreshToken?: true;
+    hashRefreshToken?: true;
 }
