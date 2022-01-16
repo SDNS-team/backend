@@ -1,1 +1,1 @@
-export type JwtPayload = { id: string; username: string };
+export type JwtPayloadType = { id: string; username: string };

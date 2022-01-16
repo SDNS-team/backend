@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
+import { Profile, Strategy } from 'passport-google-oauth20';
 import { AuthProviderEnum } from '../../common/enums/auth-provider.enum';
 import { UserService } from '../../user/user.service';
 
@@ -19,7 +19,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     _accessToken: string,
     _refreshToken: string,
     profile: Profile,
-    done: VerifyCallback,
   ) {
     const { id, name, emails } = profile;
 
@@ -49,15 +48,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       });
     }
 
-    console.log(
-      '🚀 ~ file: google.strategy.ts ~ line 50 ~ GoogleStrategy ~ classGoogleStrategyextendsPassportStrategy ~ user',
-      user,
-    );
-
     if (!user?.id) {
       throw new UnauthorizedException();
     }
 
-    done(null, user);
+    return user;
   }
 }

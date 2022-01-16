@@ -20,8 +20,8 @@ export class UserController {
 
   @GrpcMethod('UserService', 'findFirst')
   async findFirst(args: FindFirstUserArgs) {
-    const test = await this.userService.findFirst(args);
-    return test || {};
+    const user = await this.userService.findFirst(args);
+    return user || {};
   }
 
   @GrpcMethod('UserService', 'create')

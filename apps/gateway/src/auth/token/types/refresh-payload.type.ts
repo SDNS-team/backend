@@ -1,1 +1,1 @@
-export type RefreshPayload = { id: string };
+export type RefreshPayloadType = { id: string };

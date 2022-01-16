@@ -4,8 +4,8 @@ import { ClientsModule } from '@nestjs/microservices';
 import { ConfigModule } from '../../common/configs/config.module';
 import { ConfigService } from '../../common/configs/config.service';
 import { UserService } from '../../user/user.service';
-import { JwtStrategy } from './jwt.strategy';
-import { RefreshStrategy } from './refresh.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { RefreshStrategy } from './strategies/refresh.strategy';
 import { TokenService } from './token.service';
 
 @Module({

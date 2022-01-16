@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+import { User } from '@prisma/client/generated/user';
 import { Request, Response } from 'express';
 import { TokenService } from '../token/token.service';
 import { GoogleOauthGuard } from './google.guard';
@@ -26,8 +27,7 @@ export class GoogleController {
     if (!req.user) {
       throw new UnauthorizedException();
     }
-
-    const tokens = await this.tokenService.login(req.user); // TODO: Пофиксить тип
+    const tokens = await this.tokenService.login(<User>req.user);
     res.send(tokens);
     return tokens;
   }

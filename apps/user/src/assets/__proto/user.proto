@@ -45,8 +45,9 @@ message FindFirstQuery {
 }
 
 message UserWhereInput {
-  Filter provider = 1;
-  Filter providerId = 2;
+  Filter id = 1;
+  Filter provider = 2;
+  Filter providerId = 3;
 }
 
 message Filter {
@@ -67,5 +68,8 @@ message User {
   optional string updatedAt = 3;
   optional bool deleted = 4;
   optional string name = 5;
-  optional string hashRefreshToken = 6;
+  optional string provider = 6;
+  optional string providerId = 7;
+  optional string email = 8;
+  optional string hashRefreshToken = 9;
 }

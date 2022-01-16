@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
+import { User } from '@prisma/client/generated/user';
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '../../common/configs/config.service';
 import { UserService } from '../../user/user.service';
+import { TokensType } from './types/tokens.type';
 
 @Injectable()
 export class TokenService {
@@ -13,8 +14,27 @@ export class TokenService {
     private configService: ConfigService,
   ) {}
 
-  async login(user: User) {
-    const accessToken = this.jwtService.sign({ username: 'test', id: user.id });
+  async refresh(userId: string) {
+    const user = await this.userService.findFirst({
+      where: {
+        id: {
+          equals: userId,
+        },
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return await this.login(user);
+  }
+
+  async login(user: User): Promise<TokensType> {
+    const accessToken = this.jwtService.sign({
+      username: user.name,
+      id: user.id,
+    });
     const refreshToken = await this.getRefreshToken(user.id);
     return {
       accessToken,
@@ -22,13 +42,13 @@ export class TokenService {
     };
   }
 
-  public async getRefreshToken(userId: string): Promise<string> {
+  async getRefreshToken(userId: string): Promise<string> {
     const refreshToken = this.jwtService.sign(
       { id: userId },
       this.configService.refreshSignOptions,
     );
     const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(refreshToken.slice(72), salt); // NOTE: Костыль, max length bcrypt 72 bytes
+    const hash = await bcrypt.hash(refreshToken.slice(-30), salt); // NOTE: Костыль, max length bcrypt 72 bytes
     await this.userService.update({
       data: {
         hashRefreshToken: {
@@ -43,20 +63,10 @@ export class TokenService {
     return refreshToken;
   }
 
-  public async validateRefreshToken(
-    userId: string,
+  async validateRefreshToken(
     refreshToken: string,
+    hashRefreshToken: string,
   ): Promise<boolean> {
-    const user = await this.userService.findFirst({
-      where: {
-        id: {
-          equals: userId,
-        },
-      },
-    });
-    if (!user || !user.hashRefreshToken) {
-      return false;
-    }
-    return await bcrypt.compare(refreshToken.slice(72), user.hashRefreshToken);
+    return await bcrypt.compare(refreshToken.slice(-30), hashRefreshToken);
   }
 }

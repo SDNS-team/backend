@@ -1,6 +1,6 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { RefreshGuard } from '../token/refresh.guard';
+import { RefreshGuard } from '../token/guards/refresh.guard';
 
 @Injectable()
 export class GqlRefreshGuard extends RefreshGuard {

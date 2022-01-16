@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Query, Resolver } from '@nestjs/graphql';
-import { CurrentUser } from './graphql/gql-auth.decorator';
+import { User } from '@prisma/client/generated/user';
+import { AuthSession } from './graphql/gql-auth.decorator';
 import { GqlRefreshGuard } from './graphql/gql-refresh.guard';
 import { Tokens } from './token/models/token.model';
 import { TokenService } from './token/token.service';
@@ -11,7 +12,7 @@ export class AuthResolver {
 
   @UseGuards(GqlRefreshGuard)
   @Query(() => Tokens, { name: 'refresh' })
-  async refresh(@CurrentUser() user: any) {
+  async refresh(@AuthSession() user: User) {
     const tokens = await this.tokenService.login(user);
     return tokens;
   }
