@@ -1,9 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { CreateOneUserArgs } from '../../../gateway/src/@generated/user/create-one-user.args';
-import { FindFirstUserArgs } from '../../../gateway/src/@generated/user/find-first-user.args';
-import { FindManyUserArgs } from '../../../gateway/src/@generated/user/find-many-user.args';
-import { UpdateOneUserArgs } from '../../../gateway/src/@generated/user/update-one-user.args';
+import { CreateOneUserArgs } from '../../../../libs/models/user/create-one-user.args';
+import { FindFirstUserArgs } from '../../../../libs/models/user/find-first-user.args';
+import { FindManyUserArgs } from '../../../../libs/models/user/find-many-user.args';
+import { UpdateOneUserArgs } from '../../../../libs/models/user/update-one-user.args';
 import { UserService } from './user.service';
 
 @Controller('users')

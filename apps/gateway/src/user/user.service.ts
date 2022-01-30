@@ -2,10 +2,10 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { User } from '@prisma/client/generated/user';
 import { Observable } from 'rxjs';
-import { CreateOneUserArgs } from '../@generated/user/create-one-user.args';
-import { FindFirstUserArgs } from '../@generated/user/find-first-user.args';
-import { FindManyUserArgs } from '../@generated/user/find-many-user.args';
-import { UpdateOneUserArgs } from '../@generated/user/update-one-user.args';
+import { CreateOneUserArgs } from '../../../../libs/models/user/create-one-user.args';
+import { FindFirstUserArgs } from '../../../../libs/models/user/find-first-user.args';
+import { FindManyUserArgs } from '../../../../libs/models/user/find-many-user.args';
+import { UpdateOneUserArgs } from '../../../../libs/models/user/update-one-user.args';
 import { UserResponse } from './models/user.model';
 
 interface UserRemoteService {
