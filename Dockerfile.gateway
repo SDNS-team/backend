@@ -7,12 +7,12 @@ COPY ./apps ./apps
 COPY ./package.json ./package-lock.json ./workspace.json ./nx.json ./workspace.code-workspace ./tsconfig.base.json .
 
 RUN npm install
-RUN npx prisma generate --schema=./apps/friends/prisma/schema.prisma
+RUN npx prisma generate --schema=./apps/friend/prisma/schema.prisma
 RUN npx prisma generate --schema=./apps/user/prisma/schema.prisma
 RUN npx nx build gateway
 RUN ls | grep -v dist | grep -v package.json | grep -v package-lock.json | xargs rm -rfv
 RUN npm install --production
-RUN npx prisma generate --schema=./apps/friends/prisma/schema.prisma
+RUN npx prisma generate --schema=./apps/friend/prisma/schema.prisma
 RUN npx prisma generate --schema=./apps/user/prisma/schema.prisma
 RUN ls | grep -v dist | grep -v node_modules | xargs rm -rfv
 

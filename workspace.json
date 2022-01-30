@@ -2,7 +2,7 @@
   "version": 2,
   "projects": {
     "gateway": "apps/gateway",
-    "friends": "apps/friends",
+    "friend": "apps/friend",
     "user": "apps/user"
   }
 }

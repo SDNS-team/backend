@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'friends',
+  displayName: 'friend',
   rootDir: 'src',
   testMatch: ['.*\\.spec\\.ts$'],
   preset: '../../../jest.preset.ts',
@@ -14,5 +14,5 @@ module.exports = {
   },
   collectCoverageFrom: ['**/*.(t|j)s'],
   moduleFileExtensions: ['ts', 'js', 'json'],
-  coverageDirectory: '../../coverage/apps/friends',
+  coverageDirectory: '../../coverage/apps/friend',
 };

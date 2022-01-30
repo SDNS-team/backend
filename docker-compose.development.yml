@@ -23,7 +23,7 @@ services:
     image: 'postgres'
     restart: always
     env_file:
-      - ./apps/friends/.env
+      - ./apps/friend/.env
     ports:
       - '${DATABASE_PORT}:5432'
     environment:
@@ -51,14 +51,14 @@ services:
     depends_on:
       - birthdayapp_development_postgres_user
 
-  birthdayapp_development_friends:
+  birthdayapp_development_friend:
     env_file:
-      - ./apps/friends/.env
-    container_name: birthdayapp_development_friends
+      - ./apps/friend/.env
+    container_name: birthdayapp_development_friend
     restart: always
     build:
       context: .
-      dockerfile: Dockerfile.friends
+      dockerfile: Dockerfile.friend
       args:
         TAGS: master
     ports:

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from './common/configs/config.service';
-import { FriendModule } from './friends/friend.module';
+import { FriendModule } from './friend/friend.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({

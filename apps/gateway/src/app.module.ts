@@ -4,7 +4,7 @@ import { GraphQLError } from 'graphql';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { ConfigService } from './common/configs/config.service';
-import { FriendModule } from './friends/friend.module';
+import { FriendModule } from './friend/friend.module';
 import { UserModule } from './user/user.module';
 
 @Module({

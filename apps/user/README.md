@@ -1,4 +1,4 @@
-# App - friends
+# App - friend
 
 ## Example
 
