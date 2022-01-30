@@ -1,9 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client/generated/user';
+
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '../../common/configs/config.service';
 import { UserService } from '../../user/user.service';
+import { BodyLoginType } from './types/login.type';
 import { TokensType } from './types/tokens.type';
 
 @Injectable()
@@ -30,12 +31,16 @@ export class TokenService {
     return await this.login(user);
   }
 
-  async login(user: User): Promise<TokensType> {
+  async login(body: BodyLoginType): Promise<TokensType> {
+    console.log(
+      '🚀 ~ file: token.service.ts ~ line 34 ~ TokenService ~ login ~ user',
+      body,
+    );
     const accessToken = this.jwtService.sign({
-      username: user.name,
-      id: user.id,
+      username: body.name,
+      id: body.id,
     });
-    const refreshToken = await this.getRefreshToken(user.id);
+    const refreshToken = await this.getRefreshToken(body.id);
     return {
       accessToken,
       refreshToken,

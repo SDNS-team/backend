@@ -24,10 +24,14 @@ export class GoogleController {
   @Get('redirect')
   @UseGuards(GoogleOauthGuard)
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
-    if (!req.user) {
+    const user = <User>req.user;
+    if (!user) {
       throw new UnauthorizedException();
     }
-    const tokens = await this.tokenService.login(<User>req.user);
+    const tokens = await this.tokenService.login({
+      id: user.id,
+      name: user.name,
+    });
     res.send(tokens);
     return tokens;
   }
