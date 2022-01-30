@@ -18,3 +18,8 @@ nx build
 
 docker-compose -f docker-compose.development.yml up -d
 
+# TODO
+
+- Добавить алиасы для импорта из libs
+
+

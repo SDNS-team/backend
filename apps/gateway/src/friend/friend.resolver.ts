@@ -2,9 +2,9 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 import { FindManyFriendArgs } from '../../../../libs/models/friend/find-many-friend.args';
-import { FriendResponse } from '../../../../libs/models/friend/friend.model';
 import { GqlAuthGuard } from '../auth/graphql/gql-auth.guard';
 import { FriendAppService } from './friend.service';
+import { FriendResponse } from './models/friend.model';
 
 @Resolver(() => FriendResponse)
 export class FriendResolver {

@@ -13,6 +13,7 @@ export class AuthResolver {
   @UseGuards(GqlRefreshGuard)
   @Query(() => Tokens, { name: 'refresh' })
   async refresh(@AuthSession() user: User) {
+    // TODO: Почему тут тип из prisma?
     const tokens = await this.tokenService.login(user);
     return tokens;
   }

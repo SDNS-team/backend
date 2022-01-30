@@ -9,6 +9,7 @@ generator client {
 generator nestgraphql {
   provider = "node node_modules/prisma-nestjs-graphql"
   output   = "../../../libs/models"
+  reExport = Directories
 }
 
 datasource db {

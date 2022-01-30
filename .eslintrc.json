@@ -5,7 +5,7 @@
     "project": "tsconfig.base.json",
     "sourceType": "module"
   },
-  "ignorePatterns": ["**/*", "./src/@generated/**/*.ts"],
+  "ignorePatterns": ["**/*", "libs"],
   "plugins": ["@nrwl/nx", "@typescript-eslint/eslint-plugin"],
   "extends": [
     "plugin:@typescript-eslint/recommended",

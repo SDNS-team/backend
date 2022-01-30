@@ -29,5 +29,5 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true
   },
-  "exclude": ["node_modules", "tmp", "test", "dist"]
+  "exclude": ["node_modules", "tmp", "test", "dist", "libs"]
 }

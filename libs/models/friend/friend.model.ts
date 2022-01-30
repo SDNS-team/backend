@@ -1,31 +1,28 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field } from '@nestjs/graphql';
+import { ObjectType } from '@nestjs/graphql';
+import { ID } from '@nestjs/graphql';
 
 @ObjectType()
 export class Friend {
-  @Field(() => ID, { nullable: false })
-  id!: string;
 
-  @Field(() => Date, { nullable: false })
-  createdAt!: Date;
+    @Field(() => ID, {nullable:false})
+    id!: string;
 
-  @Field(() => Date, { nullable: false })
-  updatedAt!: Date;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
 
-  @Field(() => Boolean, { nullable: false, defaultValue: false })
-  deleted!: boolean;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 
-  @Field(() => String, { nullable: false })
-  name!: string;
+    @Field(() => Boolean, {nullable:false,defaultValue:false})
+    deleted!: boolean;
 
-  @Field(() => Date, { nullable: false })
-  birthday!: Date;
+    @Field(() => String, {nullable:false})
+    name!: string;
 
-  @Field(() => String, { nullable: true })
-  description!: string | null;
-}
+    @Field(() => Date, {nullable:false})
+    birthday!: Date;
 
-@ObjectType()
-export class FriendResponse {
-  @Field(() => [Friend], { nullable: true })
-  values: Friend[];
+    @Field(() => String, {nullable:true})
+    description!: string | null;
 }
