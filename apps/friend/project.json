@@ -3,6 +3,17 @@
   "sourceRoot": "apps/friend/src",
   "projectType": "application",
   "targets": {
+    "deploy": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx build friend",
+          "npx prisma generate --schema=./apps/friend/prisma/schema.prisma",
+          "docker build --platform linux/amd64 --no-cache --progress=plain -t birthdayapp_development_friend -f ./apps/friend/Dockerfile ."
+        ],
+        "parallel": false
+      }
+    },
     "build": {
       "executor": "@nrwl/node:build",
       "outputs": ["{options.outputPath}"],

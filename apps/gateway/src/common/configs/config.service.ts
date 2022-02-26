@@ -13,24 +13,20 @@ dotenv.config({
 
 @Injectable()
 export class ConfigService {
-  get nodeEnv(): string {
-    return get('NODE_ENV').required().asString();
-  }
-
   get host(): string {
-    return get('HOST').required().asString();
+    return get('GATEWAY_HOST').required().asString();
   }
 
   get port(): number {
-    return get('PORT').required().asPortNumber();
+    return get('GATEWAY_PORT').required().asPortNumber();
   }
 
   get staticUrl(): string {
-    return get('STATIC_URL').required().asUrlString();
+    return get('GATEWAY_STATIC_URL').required().asUrlString();
   }
 
   get appName(): string {
-    return get('APP_NAME').required().asString();
+    return get('GATEWAY_APP_NAME').required().asString();
   }
 
   get isProduction(): boolean {

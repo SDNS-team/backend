@@ -11,25 +11,20 @@ dotenv.config({
 
 @Injectable()
 export class ConfigService {
-  // TODO: проверять required() во время загрузки
-  get nodeEnv(): string {
-    return get('NODE_ENV').required().asString();
-  }
-
   get host(): string {
-    return get('HOST').required().asString();
+    return get('USER_HOST').required().asString();
   }
 
   get port(): number {
-    return get('PORT').required().asPortNumber();
+    return get('USER_PORT').required().asPortNumber();
   }
 
   get staticUrl(): string {
-    return get('STATIC_URL').required().asUrlString();
+    return get('USER_STATIC_URL').required().asUrlString();
   }
 
   get appName(): string {
-    return get('APP_NAME').required().asString();
+    return get('USER_APP_NAME').required().asString();
   }
 
   get isProduction(): boolean {

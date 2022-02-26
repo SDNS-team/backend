@@ -8,6 +8,7 @@ import { UserService } from '../../user/user.service';
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(readonly userService: UserService) {
     super({
+      // TODO: Вынести в конфиг
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_SECRET,
       callbackURL: 'http://localhost:4004/google/redirect',

@@ -1,6 +1,3 @@
-# dependencies
-/node_modules
-
 # IDEs and editors
 /.idea
 .project
@@ -33,7 +30,6 @@ Thumbs.db
 
 *.nx-tmp
 
-node_modules
 npm-debug.log
 Dockerfile*
 docker-compose*

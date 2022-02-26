@@ -39,4 +39,6 @@ testem.log
 Thumbs.db
 
 # Environment
-*.env
+.production.env
+.development.env
+.env

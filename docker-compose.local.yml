@@ -1,23 +1,33 @@
 version: '3.7'
 services:
-  birthdayapp_local_postgres:
-    container_name: 'birthdayapp_local_postgres'
+  birthdayapp_local_postgres_user:
+    container_name: 'birthdayapp_local_postgres_user'
     image: 'postgres'
     restart: always
     env_file:
       - .env
     ports:
-      - '${DATABASE_PORT}:5432'
+      - '${USER_DATABASE_PORT}:5432'
     environment:
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_PASSWORD: ${USER_DATABASE_PASSWORD}
+      POSTGRES_USER: ${USER_DATABASE_USERNAME}
+      POSTGRES_DB: ${USER_DATABASE_NAME}
     volumes:
       - /home/birthdayapp/docker_data/db-data/local:/var/lib/postgresql/data
       - ./scripts/postgres:/docker-entrypoint-initdb.d
-    networks:
-      - birthdayapp_local_postgres
 
-networks:
-  birthdayapp_local_postgres:
-    driver: bridge
+  # birthdayapp_local_postgres_friend:
+  #   container_name: 'birthdayapp_local_postgres_friend'
+  #   image: 'postgres'
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - '${FRIEND_DATABASE_PORT}:5432'
+  #   environment:
+  #     POSTGRES_PASSWORD: ${FRIEND_DATABASE_PASSWORD}
+  #     POSTGRES_USER: ${FRIEND_DATABASE_USERNAME}
+  #     POSTGRES_DB: ${FRIEND_DATABASE_NAME}
+  #   volumes:
+  #     - /home/birthdayapp/docker_data/db-data/local:/var/lib/postgresql/data
+  #     - ./scripts/postgres:/docker-entrypoint-initdb.d
