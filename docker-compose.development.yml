@@ -40,7 +40,7 @@ services:
     image: birthdayapp_development_user
     restart: always
     ports:
-      - '127.0.0.1:${USER_PORT}:9100'
+      - '127.0.0.1:${USER_PORT}:${USER_PORT}'
     links:
       - birthdayapp_development_postgres_user
 
@@ -52,7 +52,7 @@ services:
     image: birthdayapp_development_friend
     restart: always
     ports:
-      - '${FRIEND_PORT}:9100'
+      - '127.0.0.1:${FRIEND_PORT}:${FRIEND_PORT}'
     links:
       - birthdayapp_development_postgres_friend
 
@@ -62,4 +62,4 @@ services:
     image: birthdayapp_development_gateway
     restart: always
     ports:
-      - '${GATEWAY_PORT}:9100'
+      - '127.0.0.1:${GATEWAY_PORT}:${GATEWAY_PORT}'
