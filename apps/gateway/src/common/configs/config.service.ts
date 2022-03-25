@@ -37,9 +37,7 @@ export class ConfigService {
     return {
       transport: Transport.GRPC,
       options: {
-        url: `${get('FRIEND_HOST').required().asString()}:${get('FRIEND_PORT')
-          .required()
-          .asPortNumber()}`,
+        url: `${get('FRIEND_HOST').required().asString()}:${get('FRIEND_PORT').required().asPortNumber()}`,
         package: 'friend',
         protoPath: join(__dirname, 'assets/__proto/friend.proto'),
         loader: { keepCase: true },
@@ -51,9 +49,7 @@ export class ConfigService {
     return {
       transport: Transport.GRPC,
       options: {
-        url: `${get('USER_HOST').required().asString()}:${get('USER_PORT')
-          .required()
-          .asPortNumber()}`,
+        url: `${get('USER_HOST').required().asString()}:${get('USER_PORT').required().asPortNumber()}`,
         package: 'user',
         protoPath: join(__dirname, 'assets/__proto/user.proto'),
         loader: { keepCase: true },

@@ -22,8 +22,7 @@ export class UserService implements OnModuleInit {
   constructor(@Inject('USER_PACKAGE') private client: ClientGrpc) {}
 
   onModuleInit() {
-    this.userRemoteService =
-      this.client.getService<UserRemoteService>('UserService');
+    this.userRemoteService = this.client.getService<UserRemoteService>('UserService');
   }
 
   findMany(args: FindManyUserArgs): Observable<UserResponse> {

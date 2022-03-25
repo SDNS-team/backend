@@ -13,8 +13,7 @@ import { GoogleStrategy } from './google.strategy';
     ClientsModule.registerAsync([
       {
         name: 'USER_PACKAGE',
-        useFactory: (configService: ConfigService) =>
-          configService.userMicroserviceOptions,
+        useFactory: (configService: ConfigService) => configService.userMicroserviceOptions,
         inject: [ConfigService],
         imports: [ConfigModule],
       },

@@ -17,11 +17,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
 
-  async validate(
-    _accessToken: string,
-    _refreshToken: string,
-    profile: Profile,
-  ) {
+  async validate(_accessToken: string, _refreshToken: string, profile: Profile) {
     const { id, name, emails } = profile;
     if (!emails?.length) {
       throw new UnauthorizedException();

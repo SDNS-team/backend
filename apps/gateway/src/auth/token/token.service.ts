@@ -27,15 +27,12 @@ export class TokenService {
   }
 
   private createRefreshToken(body: BodyLoginType): string {
-    const refreshToken = this.jwtService.sign(
-      { id: body.id },
-      this.configService.refreshSignOptions,
-    );
+    const refreshToken = this.jwtService.sign({ id: body.id }, this.configService.refreshSignOptions);
 
     from(bcrypt.genSalt(10))
       .pipe(
-        switchMap((salt) => bcrypt.hash(refreshToken.slice(-30), salt)),
-        switchMap((hash) =>
+        switchMap(salt => bcrypt.hash(refreshToken.slice(-30), salt)),
+        switchMap(hash =>
           this.userService.update({
             data: {
               hashRefreshToken: {
@@ -53,10 +50,7 @@ export class TokenService {
     return refreshToken;
   }
 
-  async validateRefreshToken(
-    refreshToken: string,
-    hashRefreshToken: string,
-  ): Promise<boolean> {
+  async validateRefreshToken(refreshToken: string, hashRefreshToken: string): Promise<boolean> {
     return await bcrypt.compare(refreshToken.slice(-30), hashRefreshToken);
   }
 }

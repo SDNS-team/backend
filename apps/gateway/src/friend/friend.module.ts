@@ -10,8 +10,7 @@ import { FriendAppService } from './friend.service';
     ClientsModule.registerAsync([
       {
         name: 'FRIEND_PACKAGE',
-        useFactory: (configService: ConfigService) =>
-          configService.friendMicroserviceOptions,
+        useFactory: (configService: ConfigService) => configService.friendMicroserviceOptions,
         inject: [ConfigService],
         imports: [ConfigModule],
       },

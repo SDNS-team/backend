@@ -47,7 +47,8 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/friend/**/*.ts"]
+        "lintFilePatterns": ["apps/friend/**/*.ts"],
+        "fix": true
       }
     },
     "test": {

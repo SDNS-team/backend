@@ -19,9 +19,7 @@ export class FriendResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query(() => FriendResponse, { name: 'friends' })
-  async findMany(
-    @Args() args: FindManyFriendArgs,
-  ): Promise<Observable<FriendResponse>> {
+  async findMany(@Args() args: FindManyFriendArgs): Promise<Observable<FriendResponse>> {
     const result = this.friendService.findMany({ ...args });
     return result;
   }

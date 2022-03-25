@@ -48,7 +48,8 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/gateway/**/*.ts"]
+        "lintFilePatterns": ["apps/gateway/**/*.ts"],
+        "fix": true
       }
     },
     "test": {

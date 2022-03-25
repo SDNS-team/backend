@@ -6,10 +6,7 @@ import { ConfigService } from './common/configs/config.service';
 async function bootstrap() {
   const configService: ConfigService = new ConfigService();
 
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    configService.microserviceOptions,
-  );
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, configService.microserviceOptions);
 
   await app.listen();
   console.log(`Friend service is listening`);

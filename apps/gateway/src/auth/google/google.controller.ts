@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Req,
-  Res,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client/generated/user';
 import { Request, Response } from 'express';
 import { TokenService } from '../token/token.service';

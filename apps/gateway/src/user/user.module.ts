@@ -11,8 +11,7 @@ import { UserService } from './user.service';
       // TODO: Обязательно импортировать в каждый модуль?
       {
         name: 'USER_PACKAGE',
-        useFactory: (configService: ConfigService) =>
-          configService.userMicroserviceOptions,
+        useFactory: (configService: ConfigService) => configService.userMicroserviceOptions,
         inject: [ConfigService],
         imports: [ConfigModule],
       },

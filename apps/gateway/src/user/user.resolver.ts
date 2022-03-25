@@ -15,7 +15,7 @@ export class UserResolver {
   @Query(() => User, { name: 'user' })
   findFirst(@Args() args: FindFirstUserArgs): Observable<User> {
     return this.userService.findFirst({ ...args }).pipe(
-      map((it) => {
+      map(it => {
         if (R.isEmpty(it)) throw new NotFoundException('User not found');
         return it;
       }),

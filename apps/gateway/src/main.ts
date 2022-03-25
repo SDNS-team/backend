@@ -9,9 +9,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   if (!configService.isProduction) {
-    const options = new DocumentBuilder()
-      .setTitle(configService.appName)
-      .build();
+    const options = new DocumentBuilder().setTitle(configService.appName).build();
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api', app, document, {
       swaggerOptions: {
