@@ -13,7 +13,6 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {},
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "incremental": true,
@@ -28,7 +27,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "strict": true
+    "strict": true,
+    "paths": { 
+      "@models/*": ["libs/models/*"]
+    }
   },
   "exclude": ["node_modules", "tmp", "test", "dist", "libs"]
 }

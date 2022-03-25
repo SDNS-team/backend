@@ -1,5 +1,5 @@
+import { Friend } from '@models/friend/friend.model';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Friend } from '../../../../../libs/models/friend/friend.model';
 
 @ObjectType()
 export class FriendResponse {
