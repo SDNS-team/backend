@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-google-oauth20';
+import { firstValueFrom } from 'rxjs';
 import { AuthProviderEnum } from '../../common/enums/auth-provider.enum';
 import { UserService } from '../../user/user.service';
 
@@ -22,31 +23,34 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     profile: Profile,
   ) {
     const { id, name, emails } = profile;
-
-    if (!emails) {
+    if (!emails?.length) {
       throw new UnauthorizedException();
     }
 
-    let user = await this.userService.findFirst({
-      where: {
-        provider: {
-          equals: AuthProviderEnum.GOOGLE,
+    let user = await firstValueFrom(
+      this.userService.findFirst({
+        where: {
+          provider: {
+            equals: AuthProviderEnum.GOOGLE,
+          },
+          providerId: {
+            equals: id,
+          },
         },
-        providerId: {
-          equals: id,
-        },
-      },
-    });
+      }),
+    );
 
     if (!user?.id) {
-      user = await this.userService.create({
-        data: {
-          provider: AuthProviderEnum.GOOGLE,
-          providerId: id,
-          name: name?.givenName,
-          email: emails[0].value,
-        },
-      });
+      user = await firstValueFrom(
+        this.userService.create({
+          data: {
+            provider: AuthProviderEnum.GOOGLE,
+            providerId: id,
+            name: name?.givenName,
+            email: emails[0].value,
+          },
+        }),
+      );
     }
 
     if (!user?.id) {

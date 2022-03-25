@@ -12,27 +12,19 @@ import { TokenService } from './token.service';
   imports: [
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) =>
-        configService.jwtModuleOptions,
+      useFactory: async (configService: ConfigService) => configService.jwtModuleOptions,
       inject: [ConfigService],
     }),
     ClientsModule.registerAsync([
       {
         name: 'USER_PACKAGE',
-        useFactory: (configService: ConfigService) =>
-          configService.userMicroserviceOptions,
+        useFactory: (configService: ConfigService) => configService.userMicroserviceOptions,
         inject: [ConfigService],
         imports: [ConfigModule],
       },
     ]),
   ],
-  providers: [
-    ConfigService,
-    JwtStrategy,
-    RefreshStrategy,
-    TokenService,
-    UserService,
-  ],
+  providers: [ConfigService, JwtStrategy, RefreshStrategy, TokenService, UserService],
   exports: [TokenService],
 })
 export class TokenModule {}

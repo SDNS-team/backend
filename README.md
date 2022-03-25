@@ -16,6 +16,8 @@ npm i
 npx prisma generate
 nx build
 
+npx prisma generate --schema=./apps/user/prisma/schema.prisma
+
 docker-compose -f docker-compose.development.yml up -d
 
 # TODO
@@ -29,7 +31,7 @@ build docker
 nx run-many --target=build --projects=friend,user,gateway --parallel
 
 
-docker build --platform linux/amd64 --progress=plain -t b_user -f apps/user/Dockerfile .
+docker build --platform linux/amd64 --progress=plain -t birthdayapp_development_gateway -f apps/user/Dockerfile .
 
 
 docker-compose --env-file .development.env -f docker-compose.development.yml up

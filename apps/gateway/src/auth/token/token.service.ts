@@ -1,7 +1,7 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-
 import * as bcrypt from 'bcryptjs';
+import { from, switchMap } from 'rxjs';
 import { ConfigService } from '../../common/configs/config.service';
 import { UserService } from '../../user/user.service';
 import { BodyLoginType } from './types/login.type';
@@ -10,60 +10,45 @@ import { TokensType } from './types/tokens.type';
 @Injectable()
 export class TokenService {
   constructor(
-    private jwtService: JwtService,
-    private userService: UserService,
-    private configService: ConfigService,
+    private readonly configService: ConfigService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async refresh(userId: string) {
-    const user = await this.userService.findFirst({
-      where: {
-        id: {
-          equals: userId,
-        },
-      },
-    });
-
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-
-    return await this.login(user);
-  }
-
-  async login(body: BodyLoginType): Promise<TokensType> {
-    console.log(
-      '🚀 ~ file: token.service.ts ~ line 34 ~ TokenService ~ login ~ user',
-      body,
-    );
-    const accessToken = this.jwtService.sign({
-      username: body.name,
-      id: body.id,
-    });
-    const refreshToken = await this.getRefreshToken(body.id);
+  public login(body: BodyLoginType): TokensType {
     return {
-      accessToken,
-      refreshToken,
+      accessToken: this.createAccessToken(body),
+      refreshToken: this.createRefreshToken(body),
     };
   }
 
-  async getRefreshToken(userId: string): Promise<string> {
+  private createAccessToken(body: BodyLoginType): string {
+    return this.jwtService.sign({ id: body.id, username: body.name });
+  }
+
+  private createRefreshToken(body: BodyLoginType): string {
     const refreshToken = this.jwtService.sign(
-      { id: userId },
+      { id: body.id },
       this.configService.refreshSignOptions,
     );
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(refreshToken.slice(-30), salt); // NOTE: Костыль, max length bcrypt 72 bytes
-    await this.userService.update({
-      data: {
-        hashRefreshToken: {
-          set: hash,
-        },
-      },
-      where: {
-        id: userId,
-      },
-    });
+
+    from(bcrypt.genSalt(10))
+      .pipe(
+        switchMap((salt) => bcrypt.hash(refreshToken.slice(-30), salt)),
+        switchMap((hash) =>
+          this.userService.update({
+            data: {
+              hashRefreshToken: {
+                set: hash,
+              },
+            },
+            where: {
+              id: body.id,
+            },
+          }),
+        ),
+      )
+      .subscribe();
 
     return refreshToken;
   }

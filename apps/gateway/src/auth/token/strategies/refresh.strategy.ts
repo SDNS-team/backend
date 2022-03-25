@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '../../../common/configs/config.service';
 import { UserService } from '../../../user/user.service';
 import { TokenService } from '../token.service';
@@ -22,13 +23,16 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     if (!token) {
       throw new UnauthorizedException();
     }
-    const user = await this.userService.findFirst({
-      where: {
-        id: {
-          equals: payload.id,
+    const user = await firstValueFrom(
+      this.userService.findFirst({
+        where: {
+          id: {
+            equals: payload.id,
+          },
         },
-      },
-    });
+      }),
+    );
+
     if (!user?.hashRefreshToken) {
       throw new UnauthorizedException();
     }

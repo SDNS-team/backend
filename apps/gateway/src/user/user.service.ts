@@ -30,15 +30,15 @@ export class UserService implements OnModuleInit {
     return this.userRemoteService.findMany(args);
   }
 
-  async findFirst(args: FindFirstUserArgs): Promise<User | undefined> {
-    return await this.userRemoteService.findFirst({ ...args }).toPromise();
+  findFirst(args: FindFirstUserArgs): Observable<User> {
+    return this.userRemoteService.findFirst({ ...args });
   }
 
-  async create(args: CreateOneUserArgs): Promise<User | undefined> {
-    return await this.userRemoteService.create(args).toPromise();
+  create(args: CreateOneUserArgs): Observable<User> {
+    return this.userRemoteService.create(args);
   }
 
-  async update(args: UpdateOneUserArgs): Promise<User | undefined> {
-    return await this.userRemoteService.update(args).toPromise();
+  update(args: UpdateOneUserArgs): Observable<User> {
+    return this.userRemoteService.update(args);
   }
 }

@@ -27,7 +27,8 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "strict": true
   },
   "exclude": ["node_modules", "tmp", "test", "dist", "libs"]
 }

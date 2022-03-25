@@ -46,8 +46,9 @@ message FindFirstQuery {
 
 message UserWhereInput {
   Filter id = 1;
-  Filter provider = 2;
-  Filter providerId = 3;
+  Filter name = 2;
+  Filter provider = 3;
+  Filter providerId = 4;
 }
 
 message Filter {

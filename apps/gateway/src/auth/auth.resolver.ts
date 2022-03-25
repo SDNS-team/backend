@@ -12,8 +12,7 @@ export class AuthResolver {
 
   @UseGuards(GqlRefreshGuard)
   @Query(() => Tokens, { name: 'refresh' })
-  async refresh(@AuthSession() user: User) {
-    const tokens = await this.tokenService.login(user); // TODO: Почему-то можно передать не тот тип
-    return tokens;
+  refresh(@AuthSession() user: User) {
+    return this.tokenService.login(user);
   }
 }
