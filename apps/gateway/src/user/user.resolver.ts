@@ -4,7 +4,7 @@ import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import R from 'ramda';
 import { map, Observable } from 'rxjs';
-import { GqlAuthGuard } from '../auth/graphql/gql-auth.guard';
+import { GqlAuthGuard } from '../auth/token/guards/gql-auth.guard';
 import { UserService } from './user.service';
 
 @Resolver(() => User)

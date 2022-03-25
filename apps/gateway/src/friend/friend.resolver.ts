@@ -2,7 +2,7 @@ import { FindManyFriendArgs } from '@models/friend/find-many-friend.args';
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
-import { GqlAuthGuard } from '../auth/graphql/gql-auth.guard';
+import { GqlAuthGuard } from '../auth/token/guards/gql-auth.guard';
 import { FriendService } from './friend.service';
 import { FriendResponse } from './models/friend.model';
 
