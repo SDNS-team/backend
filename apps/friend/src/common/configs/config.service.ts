@@ -1,18 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import * as dotenv from 'dotenv';
 import { get } from 'env-var';
-import * as path from 'path';
 import { join } from 'path';
-
-dotenv.config({
-  path: path.join(__dirname, '.env'),
-});
 
 @Injectable()
 export class ConfigService {
   get host(): string {
-    return get('FRIEND_HOST').required().asString();
+    return get('FRIEND_HOST').required().asString(); // TODO: Я конечно не уверен, но при вызове он что каждый раз ходит в файл?
   }
 
   get port(): number {
