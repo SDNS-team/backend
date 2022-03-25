@@ -3,12 +3,12 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 import { GqlAuthGuard } from '../auth/graphql/gql-auth.guard';
-import { FriendAppService } from './friend.service';
+import { FriendService } from './friend.service';
 import { FriendResponse } from './models/friend.model';
 
 @Resolver(() => FriendResponse)
 export class FriendResolver {
-  constructor(private readonly friendService: FriendAppService) {}
+  constructor(private readonly friendService: FriendService) {}
 
   // @Mutation(() => Friend)
   // createFriend(@Args('createFriend') createFriendInput: FriendCreateInput) {

@@ -6,9 +6,10 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { User } from '@prisma/client/generated/user';
 import { Observable } from 'rxjs';
+import { MicroserviceName } from '../common/enums/microservice-name.enum';
 import { UserResponse } from './models/user.model';
 
-interface UserRemoteService {
+interface UserGrpcService {
   findMany(args: FindManyUserArgs): Observable<UserResponse>;
   findFirst(args: FindFirstUserArgs): Observable<User>;
   create(args: CreateOneUserArgs): Observable<User>;
@@ -17,27 +18,27 @@ interface UserRemoteService {
 
 @Injectable()
 export class UserService implements OnModuleInit {
-  private userRemoteService: UserRemoteService;
+  private userGrpcService: UserGrpcService;
 
-  constructor(@Inject('USER_PACKAGE') private client: ClientGrpc) {}
+  constructor(@Inject(MicroserviceName.USER_PACKAGE) private client: ClientGrpc) {}
 
   onModuleInit() {
-    this.userRemoteService = this.client.getService<UserRemoteService>('UserService');
+    this.userGrpcService = this.client.getService<UserGrpcService>('UserService');
   }
 
   findMany(args: FindManyUserArgs): Observable<UserResponse> {
-    return this.userRemoteService.findMany(args);
+    return this.userGrpcService.findMany(args);
   }
 
   findFirst(args: FindFirstUserArgs): Observable<User> {
-    return this.userRemoteService.findFirst({ ...args });
+    return this.userGrpcService.findFirst({ ...args });
   }
 
   create(args: CreateOneUserArgs): Observable<User> {
-    return this.userRemoteService.create(args);
+    return this.userGrpcService.create(args);
   }
 
   update(args: UpdateOneUserArgs): Observable<User> {
-    return this.userRemoteService.update(args);
+    return this.userGrpcService.update(args);
   }
 }
