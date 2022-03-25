@@ -3,7 +3,7 @@ import { Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client/generated/user';
 import { AuthSession } from '../common/decorators/gql-auth.decorator';
 import { GqlRefreshGuard } from './token/guards/gql-refresh.guard';
-import { Tokens } from './token/models/token.model';
+import { Tokens } from './token/models/tokens.model';
 import { TokenService } from './token/token.service';
 
 @Resolver('auth')
