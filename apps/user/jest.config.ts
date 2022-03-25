@@ -1,11 +1,11 @@
 module.exports = {
   displayName: 'user',
   rootDir: 'src',
-  testMatch: ['.*\\.spec\\.ts$'],
+  testMatch: ['**.spec.ts'],
   preset: '../../../jest.preset.ts',
   globals: {
     'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
+      tsconfig: '<rootDir>/../tsconfig.spec.json',
     },
   },
   testEnvironment: 'node',
@@ -14,5 +14,5 @@ module.exports = {
   },
   collectCoverageFrom: ['**/*.(t|j)s'],
   moduleFileExtensions: ['ts', 'js', 'json'],
-  coverageDirectory: '../../coverage/apps/user',
+  coverageDirectory: '../../../coverage/apps/user',
 };
