@@ -25,6 +25,8 @@
     "apollo-server-express": "^3.6.1",
     "apollo-server-fastify": "^3.6.1",
     "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.2",
     "dotenv": "^10.0.0",
     "env-var": "^7.1.1",
     "fastify-compress": "^4.0.1",

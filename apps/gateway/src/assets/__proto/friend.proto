@@ -6,6 +6,7 @@ import "google/protobuf/timestamp.proto";
 
 service FriendService {
   rpc FindMany (FindManyQuery) returns (FindManyResponse);
+  rpc Create (CreateOneFriendArgs) returns (Friend);
 }
 
 message FindManyQuery {
@@ -24,4 +25,14 @@ message Friend {
   string name = 5;
   string birthday = 6;
   optional string description = 7;
+}
+
+message FriendCreateInput {
+  string name = 1;
+  string birthday = 2;
+  optional string description = 3;
+}
+
+message CreateOneFriendArgs {
+  FriendCreateInput data = 1;
 }

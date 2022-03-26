@@ -1,27 +1,26 @@
-import { FindManyFriendArgs } from '@models/friend/find-many-friend.args';
 import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 import { GqlAuthGuard } from '../auth/token/guards/gql-auth.guard';
 import { FriendService } from './friend.service';
-import { FriendResponse } from './models/friend.model';
+import { CreateOneFriendArgs, FindManyFriendArgs, Friend } from './models';
 
-@Resolver(() => FriendResponse)
+@Resolver(() => Friend)
 export class FriendResolver {
   constructor(private readonly friendService: FriendService) {}
 
-  // @Mutation(() => Friend)
-  // createFriend(@Args('createFriend') createFriendInput: FriendCreateInput) {
-  //   return this.friendService.create({
-  //     data: createFriendInput,
-  //   });
-  // }
+  @UseGuards(GqlAuthGuard)
+  @Mutation(_returns => Friend)
+  createFriend(@Args() args: CreateOneFriendArgs): Observable<Friend> {
+    return this.friendService.create({
+      ...args,
+    });
+  }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => FriendResponse, { name: 'friends' })
-  async findMany(@Args() args: FindManyFriendArgs): Promise<Observable<FriendResponse>> {
-    const result = this.friendService.findMany({ ...args });
-    return result;
+  @Query(_returns => [Friend], { name: 'friends' })
+  findMany(@Args() args: FindManyFriendArgs): Observable<Friend[]> {
+    return this.friendService.findMany({ ...args });
   }
 
   // @Query(() => Friend, { name: 'friendUnique' })

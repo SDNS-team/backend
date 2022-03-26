@@ -1,12 +1,12 @@
-import { FindManyFriendArgs } from '@models/friend/find-many-friend.args';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { MicroserviceName } from '../common/enums/microservice-name.enum';
-import { FriendResponse } from './models/friend.model';
+import { CreateOneFriendArgs, FindManyFriendArgs, Friend, Friends } from './models';
 
 interface FriendGrpcService {
-  findMany(args: FindManyFriendArgs): Observable<FriendResponse>;
+  findMany(args: FindManyFriendArgs): Observable<Friends>;
+  create(args: CreateOneFriendArgs): Observable<Friend>;
 }
 
 @Injectable()
@@ -19,7 +19,11 @@ export class FriendService implements OnModuleInit {
     this.friendGrpcService = this.client.getService<FriendGrpcService>('FriendService');
   }
 
-  findMany(args: FindManyFriendArgs): Observable<FriendResponse> {
-    return this.friendGrpcService.findMany(args);
+  findMany(args: FindManyFriendArgs): Observable<Friend[]> {
+    return this.friendGrpcService.findMany(args).pipe(map(response => response.data));
+  }
+
+  create(args: CreateOneFriendArgs): Observable<Friend> {
+    return this.friendGrpcService.create(args);
   }
 }

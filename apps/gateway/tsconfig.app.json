@@ -4,6 +4,6 @@
     "outDir": "../../dist/out-tsc"
   },
   "exclude": ["**/*.spec.ts", "**/*.test.ts"],
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "../../libs/models/friend/friend-create.input.ts"]
 }
 
