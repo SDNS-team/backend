@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { get } from 'env-var';
-import { join } from 'path';
 
 @Injectable()
 export class ConfigService {
@@ -27,12 +26,10 @@ export class ConfigService {
 
   get microserviceOptions(): MicroserviceOptions {
     return {
-      transport: Transport.GRPC,
+      transport: Transport.TCP,
       options: {
-        url: `${this.host}:${this.port}`,
-        package: 'friend',
-        protoPath: join(__dirname, './assets/__proto/friend.proto'),
-        loader: { keepCase: true },
+        host: this.host,
+        port: this.port,
       },
     };
   }

@@ -9,6 +9,7 @@ export class FriendService {
   delete = this.prisma.friend.delete;
   findUnique = this.prisma.friend.findUnique;
   findMany = this.prisma.friend.findMany;
+  findFirst = this.prisma.friend.findFirst;
   count = this.prisma.friend.count;
   create = this.prisma.friend.create;
 }

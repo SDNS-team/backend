@@ -8,6 +8,15 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   }
 
   async onModuleInit() {
+    this.$use(async (params, next) => {
+      if (params.model == 'Friend') {
+        if (params.action == 'delete') {
+          params.action = 'update';
+          params.args['data'] = { deleted: true };
+        }
+      }
+      return next(params);
+    });
     await this.$connect();
   }
 

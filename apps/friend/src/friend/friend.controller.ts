@@ -1,25 +1,46 @@
-import { Controller, UsePipes } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
-import { FindManyFriendArgs } from '../../../gateway/src/friend/models/find-many-friend.args'; // TODO: переделать на интерфейс или dto
-import { TransformPipe } from '../common/pipes/transform.pipe';
-import { CreateOneFriendArgsDto } from './dto/create-one-friend-args.dto';
+import { Controller } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
+import { Friend, Prisma } from '@prisma/client/generated/friend';
+import { EMPTY } from 'rxjs';
 import { FriendService } from './friend.service';
+
+import FriendFindFirstArgs = Prisma.FriendFindFirstArgs;
+import FriendCreateArgs = Prisma.FriendCreateArgs;
+import FriendUpdateArgs = Prisma.FriendUpdateArgs;
+import FriendFindManyArgs = Prisma.FriendFindManyArgs;
+import FriendDeleteArgs = Prisma.FriendDeleteArgs;
 
 @Controller('friends')
 export class FriendController {
   constructor(private readonly friendService: FriendService) {}
 
-  @GrpcMethod(FriendService.name, 'findMany')
-  async findMany(args: FindManyFriendArgs) {
-    const result = await this.friendService.findMany({ ...args });
-    return {
-      values: result,
-    };
+  @MessagePattern({ cmd: 'findMany' })
+  async findMany(args: FriendFindManyArgs): Promise<Friend[]> {
+    return await this.friendService.findMany({ ...args });
   }
 
-  @GrpcMethod(FriendService.name, 'create')
-  @UsePipes(new TransformPipe())
-  async create(args: CreateOneFriendArgsDto) {
+  @MessagePattern({ cmd: 'findFirst' })
+  async findFirst(args: FriendFindFirstArgs): Promise<typeof EMPTY | Friend> {
+    const friend = await this.friendService.findFirst({ ...args });
+    if (!friend) {
+      return EMPTY;
+    }
+    return friend;
+  }
+
+  @MessagePattern({ cmd: 'create' })
+  async create(args: FriendCreateArgs): Promise<Friend> {
     return await this.friendService.create(args);
+  }
+
+  @MessagePattern({ cmd: 'update' })
+  async update(args: FriendUpdateArgs): Promise<Friend> {
+    return await this.friendService.update(args);
+  }
+
+  @MessagePattern({ cmd: 'delete' })
+  async delete(args: FriendDeleteArgs): Promise<boolean> {
+    await this.friendService.delete(args);
+    return true;
   }
 }

@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { GraphQLError } from 'graphql';
-import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from './common/configs/config.module';
 import { ConfigService } from './common/configs/config.service';
 import { FriendModule } from './friend/friend.module';
 import { UserModule } from './user/user.module';
@@ -12,19 +11,10 @@ import { UserModule } from './user/user.module';
     AuthModule,
     FriendModule,
     UserModule,
-    GraphQLModule.forRoot({
-      include: [FriendModule, UserModule, AuthModule],
-      debug: true,
-      playground: true,
-      disableHealthCheck: true,
-      autoSchemaFile: join(__dirname, 'src/schema.gql'),
-      formatError: (error: GraphQLError) => {
-        return {
-          message: error.message,
-          success: false,
-          status: error.extensions?.code,
-        };
-      },
+    GraphQLModule.forRootAsync({
+      useFactory: (configService: ConfigService) => configService.gqlOptions,
+      inject: [ConfigService],
+      imports: [ConfigModule],
     }),
   ],
   providers: [ConfigService],

@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { GqlModuleOptions } from '@nestjs/graphql';
 import { JwtModuleOptions, JwtSignOptions } from '@nestjs/jwt';
 import { ClientOptions, Transport } from '@nestjs/microservices';
 import * as dotenv from 'dotenv';
 import { get } from 'env-var';
+import { GraphQLError } from 'graphql';
 import { ExtractJwt, StrategyOptions } from 'passport-jwt';
 import * as path from 'path';
 import { join } from 'path';
@@ -35,12 +37,10 @@ export class ConfigService {
 
   get friendMicroserviceOptions(): ClientOptions {
     return {
-      transport: Transport.GRPC,
+      transport: Transport.TCP,
       options: {
-        url: `${get('FRIEND_HOST').required().asString()}:${get('FRIEND_PORT').required().asPortNumber()}`,
-        package: 'friend',
-        protoPath: join(__dirname, 'assets/__proto/friend.proto'),
-        loader: { keepCase: true },
+        host: get('FRIEND_HOST').required().asString(),
+        port: get('FRIEND_PORT').required().asPortNumber(),
       },
     };
   }
@@ -86,6 +86,20 @@ export class ConfigService {
   get refreshSignOptions(): JwtSignOptions {
     return {
       secret: get('REFRESH_SECRET').required().asString(),
+    };
+  }
+
+  get gqlOptions(): GqlModuleOptions {
+    return {
+      debug: true,
+      playground: true,
+      disableHealthCheck: true,
+      autoSchemaFile: join(__dirname, 'src/schema.gql'),
+      formatError: (error: GraphQLError) => {
+        console.log('🚀 ~ file: config.service.ts ~ line 99 ~ ConfigService ~ getgqlOptions ~ error', error);
+
+        return error.extensions?.response;
+      },
     };
   }
 }

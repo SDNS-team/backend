@@ -1,30 +1,40 @@
-import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
-import { GqlAuthGuard } from '../auth/token/guards/gql-auth.guard';
+import { FriendDto } from './dtos/friend.dto';
 import { FriendService } from './friend.service';
-import { CreateOneFriendArgs, FindManyFriendArgs, Friend } from './models';
+import { Friend, FriendCreateArgs, FriendEditArgs, FriendFindManyArgs, FriendFindOneArgs, FriendRemoveArgs } from './models';
 
+// @UseGuards(GqlAuthGuard)
 @Resolver(() => Friend)
 export class FriendResolver {
   constructor(private readonly friendService: FriendService) {}
 
-  @UseGuards(GqlAuthGuard)
-  @Mutation(_returns => Friend)
-  createFriend(@Args() args: CreateOneFriendArgs): Observable<Friend> {
-    return this.friendService.create({
+  @Query(_returns => Friend, { name: 'findOneFriend' })
+  findFirst(@Args() args: FriendFindOneArgs): Observable<FriendDto> {
+    return this.friendService.findFirst({ ...args });
+  }
+
+  @Query(_returns => [Friend], { name: 'findManyFriend' })
+  findManyFriend(@Args() args: FriendFindManyArgs): Observable<FriendDto[]> {
+    return this.friendService.findMany({ ...args });
+  }
+
+  @Mutation(_returns => Friend, { name: 'createFriend' })
+  create(@Args() args: FriendCreateArgs): Observable<FriendDto> {
+    return this.friendService.create({ ...args });
+  }
+
+  @Mutation(_returns => Friend, { name: 'editFriend' })
+  editFriend(@Args() args: FriendEditArgs): Observable<FriendDto> {
+    return this.friendService.update({
       ...args,
     });
   }
 
-  @UseGuards(GqlAuthGuard)
-  @Query(_returns => [Friend], { name: 'friends' })
-  findMany(@Args() args: FindManyFriendArgs): Observable<Friend[]> {
-    return this.friendService.findMany({ ...args });
+  @Mutation(_returns => Boolean)
+  removeFriend(@Args() args: FriendRemoveArgs): Observable<boolean> {
+    return this.friendService.remove({
+      ...args,
+    });
   }
-
-  // @Query(() => Friend, { name: 'friendUnique' })
-  // async findUnique(@Args() args: FindUniqueFriendArgs) {
-  //   return this.friendService.findUnique({ ...args });
-  // }
 }
