@@ -37,11 +37,16 @@ export class FriendService {
   }
 
   update(args: FriendEditArgs): Observable<FriendDto> {
-    return this.client.send<Friend>({ cmd: 'update' }, args).pipe(
-      timeout(5000),
-      catchError(error => throwError(() => new ForbiddenException(error.message))),
-      throwIfEmpty(() => new NotFoundException('User not found')),
-      map(friend => plainToClass(FriendDto, friend)),
+    return this.findFirst({
+      where: args.where,
+    }).pipe(
+      mergeMap(() =>
+        this.client.send<Friend>({ cmd: 'update' }, args).pipe(
+          timeout(5000),
+          catchError(error => throwError(() => new ForbiddenException(error.message))),
+          map(friend => plainToClass(FriendDto, friend)),
+        ),
+      ),
     );
   }
 

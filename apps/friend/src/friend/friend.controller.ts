@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, ForbiddenException } from '@nestjs/common';
 import { MessagePattern, RpcException } from '@nestjs/microservices';
 import { Friend, Prisma } from '@prisma/client/generated/friend';
 import { EMPTY } from 'rxjs';
@@ -23,21 +23,42 @@ export class FriendController {
 
   @MessagePattern({ cmd: 'findFirst' })
   async findFirst(args: FriendFindFirstArgs): Promise<typeof EMPTY | Friend> {
-    const friend = await this.friendService.findFirst({ ...args });
-    if (!friend || friend.deleted) {
-      return EMPTY;
+    try {
+      const friend = await this.friendService.findFirst({ ...args });
+      if (!friend || friend.deleted) {
+        return EMPTY;
+      }
+      return friend;
+    } catch (error) {
+      if (!this.configService.isProduction && error instanceof Error) {
+        throw new RpcException(error.message);
+      }
+      throw new RpcException(ForbiddenException);
     }
-    return friend;
   }
 
   @MessagePattern({ cmd: 'create' })
   async create(args: FriendCreateArgs): Promise<Friend> {
-    return await this.friendService.create(args);
+    try {
+      return await this.friendService.create(args);
+    } catch (error) {
+      if (!this.configService.isProduction && error instanceof Error) {
+        throw new RpcException(error.message);
+      }
+      throw new RpcException(ForbiddenException);
+    }
   }
 
   @MessagePattern({ cmd: 'update' })
   async update(args: FriendUpdateArgs): Promise<Friend> {
-    return await this.friendService.update(args);
+    try {
+      return await this.friendService.update(args);
+    } catch (error) {
+      if (!this.configService.isProduction && error instanceof Error) {
+        throw new RpcException(error.message);
+      }
+      throw new RpcException(ForbiddenException);
+    }
   }
 
   @MessagePattern({ cmd: 'delete' })
