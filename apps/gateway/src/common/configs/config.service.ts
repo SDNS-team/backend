@@ -95,11 +95,7 @@ export class ConfigService {
       playground: true,
       disableHealthCheck: true,
       autoSchemaFile: join(__dirname, 'src/schema.gql'),
-      formatError: (error: GraphQLError) => {
-        console.log('🚀 ~ file: config.service.ts ~ line 99 ~ ConfigService ~ getgqlOptions ~ error', error);
-
-        return error.extensions?.response;
-      },
+      formatError: (error: GraphQLError) => error.extensions?.response,
     };
   }
 }

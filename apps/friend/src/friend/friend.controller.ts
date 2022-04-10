@@ -1,7 +1,8 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, RpcException } from '@nestjs/microservices';
 import { Friend, Prisma } from '@prisma/client/generated/friend';
 import { EMPTY } from 'rxjs';
+import { ConfigService } from '../common/configs/config.service';
 import { FriendService } from './friend.service';
 
 import FriendFindFirstArgs = Prisma.FriendFindFirstArgs;
@@ -10,9 +11,10 @@ import FriendUpdateArgs = Prisma.FriendUpdateArgs;
 import FriendFindManyArgs = Prisma.FriendFindManyArgs;
 import FriendDeleteArgs = Prisma.FriendDeleteArgs;
 
+// TODO: Удалить DTO
 @Controller('friends')
 export class FriendController {
-  constructor(private readonly friendService: FriendService) {}
+  constructor(private readonly friendService: FriendService, private readonly configService: ConfigService) {}
 
   @MessagePattern({ cmd: 'findMany' })
   async findMany(args: FriendFindManyArgs): Promise<Friend[]> {
@@ -22,7 +24,7 @@ export class FriendController {
   @MessagePattern({ cmd: 'findFirst' })
   async findFirst(args: FriendFindFirstArgs): Promise<typeof EMPTY | Friend> {
     const friend = await this.friendService.findFirst({ ...args });
-    if (!friend) {
+    if (!friend || friend.deleted) {
       return EMPTY;
     }
     return friend;
@@ -40,7 +42,14 @@ export class FriendController {
 
   @MessagePattern({ cmd: 'delete' })
   async delete(args: FriendDeleteArgs): Promise<boolean> {
-    await this.friendService.delete(args);
-    return true;
+    try {
+      await this.friendService.delete(args);
+      return true;
+    } catch (error) {
+      if (!this.configService.isProduction && error instanceof Error) {
+        throw new RpcException(error.message);
+      }
+      return false;
+    }
   }
 }

@@ -1,11 +1,12 @@
 import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { plainToClass } from 'class-transformer';
-import { catchError, map, Observable, throwError, throwIfEmpty, timeout } from 'rxjs';
+import { catchError, map, mergeMap, Observable, throwError, throwIfEmpty, timeout } from 'rxjs';
 import { MicroserviceName } from '../common/enums/microservice-name.enum';
 import { FriendDto } from './dtos/friend.dto';
 import { Friend, FriendCreateArgs, FriendEditArgs, FriendFindManyArgs, FriendFindOneArgs, FriendRemoveArgs } from './models';
 
+// TODO: поиграться с таймаутами и вынести в конфиг константой
 @Injectable()
 export class FriendService {
   constructor(@Inject(MicroserviceName.FRIEND_PACKAGE) private client: ClientProxy) {}
@@ -22,6 +23,7 @@ export class FriendService {
     return this.client.send<Friend>({ cmd: 'findFirst' }, args).pipe(
       timeout(5000),
       catchError(error => throwError(() => new ForbiddenException(error.message))),
+      throwIfEmpty(() => new NotFoundException('User not found')),
       map(friend => plainToClass(FriendDto, friend)),
     );
   }
@@ -44,9 +46,13 @@ export class FriendService {
   }
 
   remove(args: FriendRemoveArgs): Observable<boolean> {
-    return this.client.send<boolean>({ cmd: 'delete' }, args).pipe(
-      timeout(5000),
-      catchError(error => throwError(() => new ForbiddenException(error.message))),
+    return this.findFirst(args).pipe(
+      mergeMap(() =>
+        this.client.send<boolean>({ cmd: 'delete' }, args).pipe(
+          timeout(5000),
+          catchError(error => throwError(() => new ForbiddenException(error.message))),
+        ),
+      ),
     );
   }
 }
