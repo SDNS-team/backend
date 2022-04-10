@@ -9,22 +9,22 @@ import { Friend, FriendCreateArgs, FriendEditArgs, FriendFindManyArgs, FriendFin
 export class FriendResolver {
   constructor(private readonly friendService: FriendService) {}
 
-  @Query(_returns => Friend, { name: 'findOneFriend' })
-  findFirst(@Args() args: FriendFindOneArgs): Observable<FriendDto> {
+  @Query(_returns => Friend)
+  findOneFriend(@Args() args: FriendFindOneArgs): Observable<FriendDto> {
     return this.friendService.findFirst({ ...args });
   }
 
-  @Query(_returns => [Friend], { name: 'findManyFriend' })
+  @Query(_returns => [Friend])
   findManyFriend(@Args() args: FriendFindManyArgs): Observable<FriendDto[]> {
     return this.friendService.findMany({ ...args });
   }
 
-  @Mutation(_returns => Friend, { name: 'createFriend' })
-  create(@Args() args: FriendCreateArgs): Observable<FriendDto> {
+  @Mutation(_returns => Friend)
+  createFriend(@Args() args: FriendCreateArgs): Observable<FriendDto> {
     return this.friendService.create({ ...args });
   }
 
-  @Mutation(_returns => Friend, { name: 'editFriend' })
+  @Mutation(_returns => Friend)
   editFriend(@Args() args: FriendEditArgs): Observable<FriendDto> {
     return this.friendService.update({
       ...args,

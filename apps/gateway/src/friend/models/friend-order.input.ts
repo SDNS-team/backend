@@ -4,5 +4,5 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class FriendOrderInput {
   @Field(_type => SortOrder, { nullable: true })
-  id?: keyof typeof SortOrder;
+  createdAt?: keyof typeof SortOrder;
 }

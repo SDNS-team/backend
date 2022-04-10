@@ -6,6 +6,7 @@ export { FriendFindManyWhereInput } from './friend-find-many-where.input';
 export { FriendFindManyArgs } from './friend-find-many.args';
 export { FriendFindOneWhereInput } from './friend-find-one-where.input';
 export { FriendFindOneArgs } from './friend-find-one.args';
+export { FriendOrderInput } from './friend-order.input';
 export { FriendRemoveArgs } from './friend-remove.args';
 export { FriendWhereUniqueInput } from './friend-where-unique.input';
 export { Friend } from './friend.model';

@@ -18,14 +18,25 @@ export class FriendController {
 
   @MessagePattern({ cmd: 'findMany' })
   async findMany(args: FriendFindManyArgs): Promise<Friend[]> {
-    return await this.friendService.findMany({ ...args });
+    return await this.friendService.findMany({
+      ...args,
+      where: {
+        ...args.where,
+        deleted: false,
+      },
+    });
   }
 
   @MessagePattern({ cmd: 'findFirst' })
   async findFirst(args: FriendFindFirstArgs): Promise<typeof EMPTY | Friend> {
     try {
-      const friend = await this.friendService.findFirst({ ...args });
-      if (!friend || friend.deleted) {
+      const friend = await this.friendService.findFirst({
+        where: {
+          ...args.where,
+          deleted: false,
+        },
+      });
+      if (!friend) {
         return EMPTY;
       }
       return friend;

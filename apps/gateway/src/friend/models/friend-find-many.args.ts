@@ -1,6 +1,5 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { FriendFindManyWhereInput } from '.';
-import { FriendOrderInput } from './friend-order.input';
+import { FriendFindManyWhereInput, FriendOrderInput } from '.';
 
 @ArgsType()
 export class FriendFindManyArgs {

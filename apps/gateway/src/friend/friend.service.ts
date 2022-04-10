@@ -1,10 +1,17 @@
 import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { Prisma } from '@prisma/client/generated/friend';
 import { plainToClass } from 'class-transformer';
 import { catchError, map, mergeMap, Observable, throwError, throwIfEmpty, timeout } from 'rxjs';
 import { MicroserviceName } from '../common/enums/microservice-name.enum';
 import { FriendDto } from './dtos/friend.dto';
-import { Friend, FriendCreateArgs, FriendEditArgs, FriendFindManyArgs, FriendFindOneArgs, FriendRemoveArgs } from './models';
+import { Friend } from './models';
+
+import FriendFindFirstArgs = Prisma.FriendFindFirstArgs;
+import FriendCreateArgs = Prisma.FriendCreateArgs;
+import FriendUpdateArgs = Prisma.FriendUpdateArgs;
+import FriendFindManyArgs = Prisma.FriendFindManyArgs;
+import FriendDeleteArgs = Prisma.FriendDeleteArgs;
 
 // TODO: поиграться с таймаутами и вынести в конфиг константой
 @Injectable()
@@ -19,11 +26,11 @@ export class FriendService {
     );
   }
 
-  findFirst(args: FriendFindOneArgs): Observable<FriendDto> {
+  findFirst(args: FriendFindFirstArgs): Observable<FriendDto> {
     return this.client.send<Friend>({ cmd: 'findFirst' }, args).pipe(
       timeout(5000),
       catchError(error => throwError(() => new ForbiddenException(error.message))),
-      throwIfEmpty(() => new NotFoundException('User not found')),
+      throwIfEmpty(() => new NotFoundException('Friend not found')),
       map(friend => plainToClass(FriendDto, friend)),
     );
   }
@@ -36,7 +43,7 @@ export class FriendService {
     );
   }
 
-  update(args: FriendEditArgs): Observable<FriendDto> {
+  update(args: FriendUpdateArgs): Observable<FriendDto> {
     return this.findFirst({
       where: args.where,
     }).pipe(
@@ -50,7 +57,7 @@ export class FriendService {
     );
   }
 
-  remove(args: FriendRemoveArgs): Observable<boolean> {
+  remove(args: FriendDeleteArgs): Observable<boolean> {
     return this.findFirst(args).pipe(
       mergeMap(() =>
         this.client.send<boolean>({ cmd: 'delete' }, args).pipe(
