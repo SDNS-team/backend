@@ -3,6 +3,7 @@
   "projects": {
     "gateway": "apps/gateway",
     "friend": "apps/friend",
+    "note": "apps/note",
     "user": "apps/user"
   }
 }

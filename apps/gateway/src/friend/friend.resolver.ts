@@ -1,5 +1,7 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
+import { Note } from '../note/models';
+import { NoteService } from '../note/note.service';
 import { FriendDto } from './dtos/friend.dto';
 import { FriendService } from './friend.service';
 import { Friend, FriendCreateArgs, FriendEditArgs, FriendFindManyArgs, FriendFindOneArgs, FriendRemoveArgs } from './models';
@@ -7,7 +9,7 @@ import { Friend, FriendCreateArgs, FriendEditArgs, FriendFindManyArgs, FriendFin
 // @UseGuards(GqlAuthGuard)
 @Resolver(() => Friend)
 export class FriendResolver {
-  constructor(private readonly friendService: FriendService) {}
+  constructor(private readonly friendService: FriendService, private readonly noteService: NoteService) {}
 
   @Query(_returns => Friend)
   findOneFriend(@Args() args: FriendFindOneArgs): Observable<FriendDto> {
@@ -35,6 +37,17 @@ export class FriendResolver {
   removeFriend(@Args() args: FriendRemoveArgs): Observable<boolean> {
     return this.friendService.remove({
       ...args,
+    });
+  }
+
+  @ResolveField(_returns => [Note])
+  async notes(@Parent() friend: Friend) {
+    return this.noteService.findMany({
+      where: {
+        friendId: {
+          equals: friend.id,
+        },
+      },
     });
   }
 }

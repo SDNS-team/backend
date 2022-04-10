@@ -31,6 +31,7 @@ export class FriendController {
   async findFirst(args: FriendFindFirstArgs): Promise<typeof EMPTY | Friend> {
     try {
       const friend = await this.friendService.findFirst({
+        ...args,
         where: {
           ...args.where,
           deleted: false,

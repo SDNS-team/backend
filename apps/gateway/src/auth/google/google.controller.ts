@@ -6,7 +6,7 @@ import { GoogleOauthGuard } from './google.guard';
 
 @Controller('google') // TODO: Поменять на auth/google в console.cloud.google.com
 export class GoogleController {
-  constructor(private tokenService: TokenService) {}
+  constructor(private readonly tokenService: TokenService) {}
 
   @UseGuards(GoogleOauthGuard)
   @Get()

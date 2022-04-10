@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ClientsModule } from '@nestjs/microservices';
 import { ConfigModule } from '../common/configs/config.module';
 import { ConfigService } from '../common/configs/config.service';
@@ -10,7 +10,7 @@ import { NoteService } from './note.service';
 
 @Module({
   imports: [
-    FriendModule,
+    forwardRef(() => FriendModule), // TODO: убрать циклическую зависимость
     ClientsModule.registerAsync([
       {
         name: MicroserviceName.NOTE_PACKAGE,

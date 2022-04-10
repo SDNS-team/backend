@@ -14,11 +14,28 @@ import NoteDeleteArgs = Prisma.NoteDeleteArgs;
 export class NoteController {
   constructor(private readonly noteService: NoteService, private readonly configService: ConfigService) {}
 
+  @MessagePattern({ cmd: 'findMany' })
+  async findMany(args: NoteFindManyArgs): Promise<Note[]> {
+    return await this.noteService.findMany({
+      ...args,
+      where: {
+        ...args.where,
+        deleted: false,
+      },
+    });
+  }
+
   @MessagePattern({ cmd: 'findFirst' })
   async findFirst(args: NoteFindFirstArgs): Promise<typeof EMPTY | Note> {
     try {
-      const note = await this.noteService.findFirst({ ...args });
-      if (!note || note.deleted) {
+      const note = await this.noteService.findFirst({
+        ...args,
+        where: {
+          ...args.where,
+          deleted: false,
+        },
+      });
+      if (!note) {
         return EMPTY;
       }
       return note;
@@ -28,11 +45,6 @@ export class NoteController {
       }
       throw new RpcException(ForbiddenException);
     }
-  }
-
-  @MessagePattern({ cmd: 'findMany' })
-  async findMany(args: NoteFindManyArgs): Promise<Note[]> {
-    return await this.noteService.findMany({ ...args });
   }
 
   @MessagePattern({ cmd: 'create' })

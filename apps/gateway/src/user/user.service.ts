@@ -20,7 +20,7 @@ interface UserGrpcService {
 export class UserService implements OnModuleInit {
   private userGrpcService: UserGrpcService;
 
-  constructor(@Inject(MicroserviceName.USER_PACKAGE) private client: ClientGrpc) {}
+  constructor(@Inject(MicroserviceName.USER_PACKAGE) private readonly client: ClientGrpc) {}
 
   onModuleInit() {
     this.userGrpcService = this.client.getService<UserGrpcService>('UserService');

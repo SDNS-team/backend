@@ -16,7 +16,7 @@ import FriendDeleteArgs = Prisma.FriendDeleteArgs;
 // TODO: поиграться с таймаутами и вынести в конфиг константой
 @Injectable()
 export class FriendService {
-  constructor(@Inject(MicroserviceName.FRIEND_PACKAGE) private client: ClientProxy) {}
+  constructor(@Inject(MicroserviceName.FRIEND_PACKAGE) private readonly client: ClientProxy) {}
 
   findMany(args: FriendFindManyArgs): Observable<FriendDto[]> {
     return this.client.send<Friend[]>({ cmd: 'findMany' }, args).pipe(
