@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// TODO: поменять название таблицы Note ---> notes (с другими так-же)
+// TODO: Можно ли устанавливать в where индека по колличеству count(5)
+// TODO: Как накинуть индекс на friendId?
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../../../node_modules/@prisma/client/generated/note"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+generator nestgraphql {
+  provider = "node node_modules/prisma-nestjs-graphql"
+  output   = "../../../libs/models"
+  reExport = Directories
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("NOTE_DATABASE_URL")
+}
+
+model Note {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deleted     Boolean  @default(false)
+  friendId    String   @db.Uuid
+  description String
+}

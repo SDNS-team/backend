@@ -45,6 +45,16 @@ export class ConfigService {
     };
   }
 
+  get noteMicroserviceOptions(): ClientOptions {
+    return {
+      transport: Transport.TCP,
+      options: {
+        host: get('NOTE_HOST').required().asString(),
+        port: get('NOTE_PORT').required().asPortNumber(),
+      },
+    };
+  }
+
   get userMicroserviceOptions(): ClientOptions {
     return {
       transport: Transport.GRPC,

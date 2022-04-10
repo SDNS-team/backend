@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './common/configs/config.module';
 import { ConfigService } from './common/configs/config.service';
 import { FriendModule } from './friend/friend.module';
+import { NoteModule } from './note/note.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -11,6 +12,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     FriendModule,
     UserModule,
+    NoteModule,
     GraphQLModule.forRootAsync({
       useFactory: (configService: ConfigService) => configService.gqlOptions,
       inject: [ConfigService],
