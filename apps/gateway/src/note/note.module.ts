@@ -5,12 +5,14 @@ import { ConfigService } from '../common/configs/config.service';
 import { MicroserviceName } from '../common/enums/microservice-name.enum';
 import { FriendModule } from '../friend/friend.module';
 import { FriendService } from '../friend/friend.service';
+import { UserModule } from '../user/user.module';
 import { NoteResolver } from './note.resolver';
 import { NoteService } from './note.service';
 
 @Module({
   imports: [
     forwardRef(() => FriendModule), // TODO: убрать циклическую зависимость
+    UserModule,
     ClientsModule.registerAsync([
       {
         name: MicroserviceName.NOTE_PACKAGE,

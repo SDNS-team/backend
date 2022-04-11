@@ -25,4 +25,5 @@ model Friend {
   name        String
   birthday    DateTime
   description String?
+  userId      String   @db.Uuid
 }

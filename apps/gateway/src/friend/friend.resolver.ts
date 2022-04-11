@@ -11,12 +11,12 @@ import { Friend, FriendCreateArgs, FriendEditArgs, FriendFindManyArgs, FriendFin
 export class FriendResolver {
   constructor(private readonly friendService: FriendService, private readonly noteService: NoteService) {}
 
-  @Query(_returns => Friend)
+  @Query(_returns => Friend, { description: 'Find one friend current user' })
   findOneFriend(@Args() args: FriendFindOneArgs): Observable<FriendDto> {
     return this.friendService.findFirst({ ...args });
   }
 
-  @Query(_returns => [Friend])
+  @Query(_returns => [Friend], { description: 'Find friends current user' })
   findManyFriend(@Args() args: FriendFindManyArgs): Observable<FriendDto[]> {
     return this.friendService.findMany({ ...args });
   }

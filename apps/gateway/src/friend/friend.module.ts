@@ -5,12 +5,15 @@ import { ConfigService } from '../common/configs/config.service';
 import { MicroserviceName } from '../common/enums/microservice-name.enum';
 import { NoteModule } from '../note/note.module';
 import { NoteService } from '../note/note.service';
+import { UserModule } from '../user/user.module';
+import { UserService } from '../user/user.service';
 import { FriendResolver } from './friend.resolver';
 import { FriendService } from './friend.service';
 
 @Module({
   imports: [
     NoteModule,
+    UserModule,
     ClientsModule.registerAsync([
       {
         name: MicroserviceName.FRIEND_PACKAGE,
@@ -20,7 +23,7 @@ import { FriendService } from './friend.service';
       },
     ]),
   ],
-  providers: [FriendService, FriendResolver, NoteService],
+  providers: [FriendService, FriendResolver, NoteService, UserService],
   exports: [ClientsModule, FriendService],
 })
 export class FriendModule {}

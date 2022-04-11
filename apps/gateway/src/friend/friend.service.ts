@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client/generated/friend';
 import { plainToClass } from 'class-transformer';
 import { catchError, map, mergeMap, Observable, throwError, throwIfEmpty, timeout } from 'rxjs';
 import { MicroserviceName } from '../common/enums/microservice-name.enum';
+import { UserService } from '../user/user.service';
 import { FriendDto } from './dtos/friend.dto';
 import { Friend } from './models';
 
@@ -14,9 +15,10 @@ import FriendFindManyArgs = Prisma.FriendFindManyArgs;
 import FriendDeleteArgs = Prisma.FriendDeleteArgs;
 
 // TODO: поиграться с таймаутами и вынести в конфиг константой
+// TODO: Сделать поиск только по текущему пользователю
 @Injectable()
 export class FriendService {
-  constructor(@Inject(MicroserviceName.FRIEND_PACKAGE) private readonly client: ClientProxy) {}
+  constructor(@Inject(MicroserviceName.FRIEND_PACKAGE) private readonly client: ClientProxy, private readonly userService: UserService) {}
 
   findMany(args: FriendFindManyArgs): Observable<FriendDto[]> {
     return this.client.send<Friend[]>({ cmd: 'findMany' }, args).pipe(
@@ -36,11 +38,21 @@ export class FriendService {
   }
 
   create(args: FriendCreateArgs): Observable<FriendDto> {
-    return this.client.send<Friend>({ cmd: 'create' }, args).pipe(
-      timeout(5000),
-      catchError(error => throwError(() => new ForbiddenException(error.message))),
-      map(friend => plainToClass(FriendDto, friend)),
-    );
+    return this.userService
+      .findFirst({
+        where: {
+          id: args.data.userId,
+        },
+      })
+      .pipe(
+        mergeMap(() =>
+          this.client.send<Friend>({ cmd: 'create' }, args).pipe(
+            timeout(5000),
+            catchError(error => throwError(() => new ForbiddenException(error.message))),
+            map(friend => plainToClass(FriendDto, friend)),
+          ),
+        ),
+      );
   }
 
   update(args: FriendUpdateArgs): Observable<FriendDto> {
