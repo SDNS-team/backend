@@ -1,5 +1,5 @@
 import { INestApplication, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client/generated/note';
+import { Prisma, PrismaClient } from '@prisma/client/generated/note';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
@@ -9,7 +9,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
   async onModuleInit() {
     this.$use(async (params, next) => {
-      if (params.model == 'Note') {
+      if (params.model === Prisma.ModelName.Note) {
         if (params.action == 'delete') {
           params.action = 'update';
           params.args['data'] = { deleted: true };

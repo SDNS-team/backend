@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { GqlModuleOptions } from '@nestjs/graphql';
 import { JwtModuleOptions, JwtSignOptions } from '@nestjs/jwt';
-import { ClientOptions, Transport } from '@nestjs/microservices';
+import { TcpClientOptions, Transport } from '@nestjs/microservices';
 import * as dotenv from 'dotenv';
 import { get } from 'env-var';
 import { GraphQLError } from 'graphql';
@@ -35,7 +35,7 @@ export class ConfigService {
     return get('NODE_ENV').required().asString() === 'production';
   }
 
-  get friendMicroserviceOptions(): ClientOptions {
+  get friendMicroserviceOptions(): TcpClientOptions {
     return {
       transport: Transport.TCP,
       options: {
@@ -45,7 +45,7 @@ export class ConfigService {
     };
   }
 
-  get noteMicroserviceOptions(): ClientOptions {
+  get noteMicroserviceOptions(): TcpClientOptions {
     return {
       transport: Transport.TCP,
       options: {
@@ -55,14 +55,12 @@ export class ConfigService {
     };
   }
 
-  get userMicroserviceOptions(): ClientOptions {
+  get userMicroserviceOptions(): TcpClientOptions {
     return {
-      transport: Transport.GRPC,
+      transport: Transport.TCP,
       options: {
-        url: `${get('USER_HOST').required().asString()}:${get('USER_PORT').required().asPortNumber()}`,
-        package: 'user',
-        protoPath: join(__dirname, 'assets/__proto/user.proto'),
-        loader: { keepCase: true },
+        host: get('USER_HOST').required().asString(),
+        port: get('USER_PORT').required().asPortNumber(),
       },
     };
   }

@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { TcpClientOptions, Transport } from '@nestjs/microservices';
 import * as dotenv from 'dotenv';
 import { get } from 'env-var';
 import * as path from 'path';
-import { join } from 'path';
 
 dotenv.config({
   path: path.join(__dirname, '.env'),
@@ -31,14 +30,12 @@ export class ConfigService {
     return get('NODE_ENV').required().asString() === 'production';
   }
 
-  get microserviceOptions(): MicroserviceOptions {
+  get microserviceOptions(): TcpClientOptions {
     return {
-      transport: Transport.GRPC,
+      transport: Transport.TCP,
       options: {
-        url: `${this.host}:${this.port}`,
-        package: 'user',
-        protoPath: join(__dirname, './assets/__proto/user.proto'),
-        loader: { keepCase: true },
+        host: get('USER_HOST').required().asString(),
+        port: get('USER_PORT').required().asPortNumber(),
       },
     };
   }

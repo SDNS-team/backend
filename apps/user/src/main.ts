@@ -7,6 +7,6 @@ async function bootstrap() {
   const configService: ConfigService = new ConfigService();
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, configService.microserviceOptions);
   await app.listen();
-  console.log(`User service is listening`);
+  console.log(`App ${configService.appName} is listening`);
 }
 bootstrap();

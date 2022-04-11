@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { TcpClientOptions, Transport } from '@nestjs/microservices';
 import { get } from 'env-var';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class ConfigService {
     return get('NODE_ENV').required().asString() === 'production';
   }
 
-  get microserviceOptions(): MicroserviceOptions {
+  get microserviceOptions(): TcpClientOptions {
     return {
       transport: Transport.TCP,
       options: {

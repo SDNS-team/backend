@@ -1,44 +1,47 @@
-import { CreateOneUserArgs } from '@models/user/create-one-user.args';
-import { FindFirstUserArgs } from '@models/user/find-first-user.args';
-import { FindManyUserArgs } from '@models/user/find-many-user.args';
-import { UpdateOneUserArgs } from '@models/user/update-one-user.args';
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
-import { User } from '@prisma/client/generated/user';
-import { Observable } from 'rxjs';
+import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { Prisma, User } from '@prisma/client/generated/user';
+import { plainToClass } from 'class-transformer';
+import { catchError, map, mergeMap, Observable, throwError, throwIfEmpty, timeout } from 'rxjs';
 import { MicroserviceName } from '../common/enums/microservice-name.enum';
-import { UserResponse } from './models/user.model';
+import { UserDto } from './dtos/user.dto';
 
-interface UserGrpcService {
-  findMany(args: FindManyUserArgs): Observable<UserResponse>;
-  findFirst(args: FindFirstUserArgs): Observable<User>;
-  create(args: CreateOneUserArgs): Observable<User>;
-  update(args: UpdateOneUserArgs): Observable<User>;
-}
+import UserFindFirstArgs = Prisma.UserFindFirstArgs;
+import UserCreateArgs = Prisma.UserCreateArgs;
+import UserUpdateArgs = Prisma.UserUpdateArgs;
 
 @Injectable()
-export class UserService implements OnModuleInit {
-  private userGrpcService: UserGrpcService;
+export class UserService {
+  constructor(@Inject(MicroserviceName.USER_PACKAGE) private readonly client: ClientProxy) {}
 
-  constructor(@Inject(MicroserviceName.USER_PACKAGE) private readonly client: ClientGrpc) {}
-
-  onModuleInit() {
-    this.userGrpcService = this.client.getService<UserGrpcService>('UserService');
+  findFirst(args: UserFindFirstArgs): Observable<UserDto> {
+    return this.client.send<User>({ cmd: 'findFirst' }, args).pipe(
+      timeout(5000),
+      catchError(error => throwError(() => new ForbiddenException(error.message))),
+      throwIfEmpty(() => new NotFoundException('User not found')),
+      map(user => plainToClass(UserDto, user)),
+    );
   }
 
-  findMany(args: FindManyUserArgs): Observable<UserResponse> {
-    return this.userGrpcService.findMany(args);
+  update(args: UserUpdateArgs): Observable<UserDto> {
+    return this.findFirst({
+      where: args.where,
+    }).pipe(
+      mergeMap(() =>
+        this.client.send<User>({ cmd: 'update' }, args).pipe(
+          timeout(5000),
+          catchError(error => throwError(() => new ForbiddenException(error.message))),
+          map(user => plainToClass(UserDto, user)),
+        ),
+      ),
+    );
   }
 
-  findFirst(args: FindFirstUserArgs): Observable<User> {
-    return this.userGrpcService.findFirst({ ...args });
-  }
-
-  create(args: CreateOneUserArgs): Observable<User> {
-    return this.userGrpcService.create(args);
-  }
-
-  update(args: UpdateOneUserArgs): Observable<User> {
-    return this.userGrpcService.update(args);
+  create(args: UserCreateArgs): Observable<UserDto> {
+    return this.client.send<User>({ cmd: 'create' }, args).pipe(
+      timeout(5000),
+      catchError(error => throwError(() => new ForbiddenException(error.message))),
+      map(user => plainToClass(UserDto, user)),
+    );
   }
 }
