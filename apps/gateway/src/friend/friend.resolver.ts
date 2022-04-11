@@ -1,12 +1,16 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
+import { GqlAuthGuard } from '../auth/token/guards/gql-auth.guard';
+import { Session } from '../auth/token/types/session.type';
+import { AuthSession } from '../common/decorators/gql-auth.decorator';
 import { Note } from '../note/models';
 import { NoteService } from '../note/note.service';
 import { FriendDto } from './dtos/friend.dto';
 import { FriendService } from './friend.service';
 import { Friend, FriendCreateArgs, FriendEditArgs, FriendFindManyArgs, FriendFindOneArgs, FriendRemoveArgs } from './models';
 
-// @UseGuards(GqlAuthGuard)
+@UseGuards(GqlAuthGuard)
 @Resolver(() => Friend)
 export class FriendResolver {
   constructor(private readonly friendService: FriendService, private readonly noteService: NoteService) {}
@@ -17,8 +21,8 @@ export class FriendResolver {
   }
 
   @Query(_returns => [Friend], { description: 'Find friends current user' })
-  findManyFriend(@Args() args: FriendFindManyArgs): Observable<FriendDto[]> {
-    return this.friendService.findMany({ ...args });
+  findManyFriend(@Args() args: FriendFindManyArgs, @AuthSession() session: Session): Observable<FriendDto[]> {
+    return this.friendService.findMany({ ...args }, session);
   }
 
   @Mutation(_returns => Friend)

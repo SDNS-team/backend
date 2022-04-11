@@ -4,7 +4,7 @@ import * as bcrypt from 'bcryptjs';
 import { from, switchMap } from 'rxjs';
 import { ConfigService } from '../../common/configs/config.service';
 import { UserService } from '../../user/user.service';
-import { BodyLoginType } from './types/login.type';
+import { Session } from './types/session.type';
 import { TokensType } from './types/tokens.type';
 
 @Injectable()
@@ -15,19 +15,19 @@ export class TokenService {
     private readonly jwtService: JwtService,
   ) {}
 
-  public login(body: BodyLoginType): TokensType {
+  public login(body: Session): TokensType {
     return {
       accessToken: this.createAccessToken(body),
       refreshToken: this.createRefreshToken(body),
     };
   }
 
-  private createAccessToken(body: BodyLoginType): string {
-    return this.jwtService.sign({ id: body.id, username: body.name });
+  private createAccessToken({ id, name: username }: Session): string {
+    return this.jwtService.sign({ id, username });
   }
 
-  private createRefreshToken(body: BodyLoginType): string {
-    const refreshToken = this.jwtService.sign({ id: body.id }, this.configService.refreshSignOptions);
+  private createRefreshToken(session: Session): string {
+    const refreshToken = this.jwtService.sign({ id: session.id }, this.configService.refreshSignOptions);
 
     from(bcrypt.genSalt(10))
       .pipe(
@@ -40,7 +40,7 @@ export class TokenService {
               },
             },
             where: {
-              id: body.id,
+              id: session.id,
             },
           }),
         ),
@@ -50,7 +50,7 @@ export class TokenService {
     return refreshToken;
   }
 
-  async validateRefreshToken(refreshToken: string, hashRefreshToken: string): Promise<boolean> {
+  public async validateRefreshToken(refreshToken: string, hashRefreshToken: string): Promise<boolean> {
     return await bcrypt.compare(refreshToken.slice(-30), hashRefreshToken);
   }
 }

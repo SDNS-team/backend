@@ -3,6 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { Prisma } from '@prisma/client/generated/friend';
 import { plainToClass } from 'class-transformer';
 import { catchError, map, mergeMap, Observable, throwError, throwIfEmpty, timeout } from 'rxjs';
+import { Session } from '../auth/token/types/session.type';
 import { MicroserviceName } from '../common/enums/microservice-name.enum';
 import { UserService } from '../user/user.service';
 import { FriendDto } from './dtos/friend.dto';
@@ -20,8 +21,17 @@ import FriendDeleteArgs = Prisma.FriendDeleteArgs;
 export class FriendService {
   constructor(@Inject(MicroserviceName.FRIEND_PACKAGE) private readonly client: ClientProxy, private readonly userService: UserService) {}
 
-  findMany(args: FriendFindManyArgs): Observable<FriendDto[]> {
-    return this.client.send<Friend[]>({ cmd: 'findMany' }, args).pipe(
+  findMany(args: FriendFindManyArgs, session: Session): Observable<FriendDto[]> {
+    // TODO: можно ли это написать красивее?
+    const query: FriendFindManyArgs = {
+      ...args,
+      where: {
+        ...args.where,
+        userId: session.id,
+      },
+    };
+
+    return this.client.send<Friend[]>({ cmd: 'findMany' }, query).pipe(
       timeout(5000),
       catchError(error => throwError(() => new ForbiddenException(error.message))),
       map(friends => plainToClass(FriendDto, friends)),
