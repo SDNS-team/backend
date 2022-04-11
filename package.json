@@ -7,7 +7,7 @@
     "build": "nx build",
     "test": "nx test",
     "lint": "nx lint",
-    "deploy": "nx deploy gateway && nx deploy user && nx deploy friend && docker rmi $(docker images --filter dangling=true -q --no-trunc)"
+    "deploy": "nx deploy gateway && nx deploy user && nx deploy friend && nx deploy note && docker rmi $(docker images --filter dangling=true -q --no-trunc)"
   },
   "private": true,
   "dependencies": {

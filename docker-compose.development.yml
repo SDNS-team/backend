@@ -56,6 +56,18 @@ services:
     links:
       - birthdayapp_development_postgres_friend
 
+  birthdayapp_development_note:
+    env_file:
+      - .development.env
+    environment:
+      DATABASE_URL: ${NOTE_DATABASE_URL}
+    image: birthdayapp_development_note
+    restart: always
+    ports:
+      - '127.0.0.1:${NOTE_PORT}:${NOTE_PORT}'
+    links:
+      - birthdayapp_development_postgres_note
+
   birthdayapp_development_gateway:
     env_file:
       - .development.env
