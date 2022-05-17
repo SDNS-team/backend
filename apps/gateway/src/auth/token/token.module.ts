@@ -16,7 +16,7 @@ import { TokenService } from './token.service';
       inject: [ConfigService],
     }),
   ],
-  providers: [ConfigService, JwtStrategy, RefreshStrategy, TokenService],
+  providers: [JwtStrategy, RefreshStrategy, TokenService],
   exports: [TokenService],
 })
 export class TokenModule {}
