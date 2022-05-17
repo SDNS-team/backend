@@ -5,6 +5,7 @@ import { TcpClientOptions, Transport } from '@nestjs/microservices';
 import * as dotenv from 'dotenv';
 import { get } from 'env-var';
 import { GraphQLError } from 'graphql';
+import { ClientOptions as MinioClientOptions } from 'minio';
 import { ExtractJwt, StrategyOptions } from 'passport-jwt';
 import * as path from 'path';
 import { join } from 'path';
@@ -104,6 +105,22 @@ export class ConfigService {
       disableHealthCheck: true,
       autoSchemaFile: join(__dirname, 'src/schema.gql'),
       formatError: (error: GraphQLError) => error.extensions?.response,
+    };
+  }
+
+  get minioClientOptions(): MinioClientOptions {
+    return {
+      endPoint: get('MINIO_ENDPOINT').required().asString(),
+      port: get('MINIO_PORT').required().asPortNumber(),
+      useSSL: this.isProduction,
+      accessKey: get('MINIO_ROOT_USER').required().asString(),
+      secretKey: get('MINIO_ROOT_PASSWORD').required().asString(),
+    };
+  }
+
+  get minioParams() {
+    return {
+      bucketNameForAvatars: get('MINIO_AVATAR_BUCKET_NAME').required().asString(),
     };
   }
 }
