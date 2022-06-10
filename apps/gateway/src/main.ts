@@ -1,6 +1,8 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import admin, { credential } from 'firebase-admin';
+import * as serviceAccount from '../../../serviceAccountKey.json';
 import { AppModule } from './app.module';
 import { ConfigService } from './common/configs/config.service';
 
@@ -25,6 +27,14 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+
+  admin.initializeApp({
+    credential: credential.cert({
+      projectId: serviceAccount.project_id,
+      privateKey: serviceAccount.private_key,
+      clientEmail: serviceAccount.client_email,
+    }),
+  });
 
   await app.listen(configService.port, configService.host);
   console.log(`Application is running on: ${await app.getUrl()}/api`);
