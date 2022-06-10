@@ -5,7 +5,7 @@
 * npx prisma generate --schema=./apps/note/prisma/schema.prisma
 * npx prisma migrate dev --schema=./apps/user/prisma/schema.prisma - накатить миграцию
 * npx prisma migrate dev --schema=./apps/friend/prisma/schema.prisma
-* npx prisma migrate dev --schema=./apps/friend/prisma/schema.prisma
+* npx prisma migrate dev --schema=./apps/note/prisma/schema.prisma
 * docker-compose --env-file=.development.env -f docker-compose.development.yml up -d
 
 ## Для себя

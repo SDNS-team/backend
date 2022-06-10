@@ -19,18 +19,6 @@ async function bootstrap() {
     });
   }
 
-  // app.register(helmet, {
-  //   contentSecurityPolicy: {
-  //     directives: {
-  //       defaultSrc: [`'self'`],
-  //       styleSrc: [`'self'`, `'unsafe-inline'`],
-  //       imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
-  //       scriptSrc: [`'self'`, `'unsafe-inline'`],
-  //     },
-  //   },
-  // });
-  // app.register(compress);
-  // app.register(fastifyMultipart);
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

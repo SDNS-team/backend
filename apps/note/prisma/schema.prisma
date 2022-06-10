@@ -11,12 +11,6 @@ generator client {
   binaryTargets = ["native", "linux-musl"]
 }
 
-generator nestgraphql {
-  provider = "node node_modules/prisma-nestjs-graphql"
-  output   = "../../../libs/models"
-  reExport = Directories
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("NOTE_DATABASE_URL")
