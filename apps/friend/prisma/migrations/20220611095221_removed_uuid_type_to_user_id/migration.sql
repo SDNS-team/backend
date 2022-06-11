@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Friend" ALTER COLUMN "userId" SET DATA TYPE TEXT;

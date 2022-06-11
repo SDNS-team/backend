@@ -1,16 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { mergeMap, Observable } from 'rxjs';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Friend } from '@prisma/client';
 import { UserSession } from '../common/interfaces/user-session.interface';
-import { FriendDto } from './dtos/friend.dto';
-import { FriendQueryService } from './friend-query.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { FriendCreateArgs, FriendEditArgs, FriendFindManyArgs, FriendRemoveArgs } from './models';
 
 @Injectable()
 export class FriendService {
-  constructor(private readonly friendQueryService: FriendQueryService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  findMany({ where, take, skip, orderBy }: FriendFindManyArgs, session: UserSession): Observable<FriendDto[]> {
-    return this.friendQueryService.findMany({
+  async findMany({ where, take, skip, orderBy }: FriendFindManyArgs, session: UserSession): Promise<Friend[]> {
+    return this.prisma.friend.findMany({
       where: {
         ...where,
         userId: session.uid,
@@ -23,8 +22,8 @@ export class FriendService {
     });
   }
 
-  create(args: FriendCreateArgs, session: UserSession): Observable<FriendDto> {
-    return this.friendQueryService.create({
+  async create(args: FriendCreateArgs, session: UserSession): Promise<Friend> {
+    return this.prisma.friend.create({
       data: {
         ...args,
         userId: session.uid,
@@ -32,25 +31,34 @@ export class FriendService {
     });
   }
 
-  edit(args: FriendEditArgs, session: UserSession): Observable<FriendDto> {
-    return this.friendQueryService
-      .findMany({
-        where: {
-          ...args.where,
-          userId: session.uid,
-        },
-      })
-      .pipe(mergeMap(() => this.friendQueryService.update(args)));
+  async edit(args: FriendEditArgs, session: UserSession): Promise<Friend> {
+    const friend = await this.prisma.friend.findFirst({
+      where: {
+        ...args.where,
+        userId: session.uid,
+      },
+    });
+
+    if (!friend) {
+      throw new NotFoundException('Friend Not Found');
+    }
+
+    return this.prisma.friend.update(args);
   }
 
-  remove(args: FriendRemoveArgs, session: UserSession): Observable<boolean> {
-    return this.friendQueryService
-      .findMany({
-        where: {
-          ...args.where,
-          userId: session.uid,
-        },
-      })
-      .pipe(mergeMap(() => this.friendQueryService.delete(args)));
+  async remove(args: FriendRemoveArgs, session: UserSession): Promise<boolean> {
+    const friend = await this.prisma.friend.findFirst({
+      where: {
+        ...args.where,
+        userId: session.uid,
+      },
+    });
+
+    if (!friend) {
+      throw new NotFoundException('Friend Not Found');
+    }
+
+    await this.prisma.friend.delete(args);
+    return true;
   }
 }

@@ -1,26 +1,22 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { AuthProviderEnum } from '.';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class User {
-  @Field(() => ID, { nullable: false })
-  id!: string;
-
-  @Field(() => Date, { nullable: false })
-  createdAt!: Date;
-
-  @Field(() => Date, { nullable: false })
-  updatedAt!: Date;
-
-  @Field(() => Boolean, { nullable: false, defaultValue: false })
-  deleted!: boolean;
+  @Field(() => String)
+  uid!: string;
 
   @Field(() => String, { nullable: true })
-  name!: string | null;
+  email!: string | null;
 
-  @Field(() => AuthProviderEnum, { nullable: true })
-  provider!: keyof typeof AuthProviderEnum | null;
+  @Field(() => Boolean)
+  emailVerified!: boolean;
 
-  @Field(() => String, { nullable: false })
-  email!: string;
+  @Field(() => String, { nullable: true })
+  displayName!: string | null;
+
+  @Field(() => String, { nullable: true })
+  photoURL!: string | null;
+
+  @Field(() => String, { nullable: true })
+  phoneNumber!: string | null;
 }

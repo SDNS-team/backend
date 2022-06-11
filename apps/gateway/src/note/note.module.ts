@@ -1,29 +1,11 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { ClientsModule } from '@nestjs/microservices';
-import { ConfigModule } from '../common/configs/config.module';
-import { ConfigService } from '../common/configs/config.service';
-import { MicroserviceName } from '../common/enums/microservice-name.enum';
-import { FriendModule } from '../friend/friend.module';
-import { FriendService } from '../friend/friend.service';
-import { UserModule } from '../user/user.module';
-import { NoteQueryService } from './note-query.service';
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
 import { NoteResolver } from './note.resolver';
 import { NoteService } from './note.service';
 
 @Module({
-  imports: [
-    forwardRef(() => FriendModule), // TODO: убрать циклическую зависимость
-    UserModule,
-    ClientsModule.registerAsync([
-      {
-        name: MicroserviceName.NOTE_PACKAGE,
-        useFactory: (configService: ConfigService) => configService.noteMicroserviceOptions,
-        inject: [ConfigService],
-        imports: [ConfigModule],
-      },
-    ]),
-  ],
-  providers: [NoteService, NoteResolver, FriendService, NoteQueryService],
-  exports: [ClientsModule, NoteService, NoteQueryService],
+  imports: [PrismaModule],
+  providers: [NoteService, NoteResolver],
+  exports: [NoteService],
 })
 export class NoteModule {}

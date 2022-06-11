@@ -1,26 +1,18 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Observable } from 'rxjs';
-import { GqlAuthGuard } from '../auth/token/guards/gql-auth.guard';
-import { UserDto } from './dtos/user.dto';
-import { User, UserEditArgs, UserFindOneArgs } from './models';
+import { Query, Resolver } from '@nestjs/graphql';
+import { FirebaseAuthGuard } from '../auth/firebase/firebase.guard';
+import { AuthSession } from '../common/decorators/auth-session.decorator';
+import { UserSession } from '../common/interfaces/user-session.interface';
+import { User } from './models/user.model';
 import { UserService } from './user.service';
 
-// TODO: Добавить метод удаления(очистки) пользователя
-@UseGuards(GqlAuthGuard)
+@UseGuards(FirebaseAuthGuard)
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(_returns => User)
-  findOneUser(@Args() args: UserFindOneArgs): Observable<UserDto> {
-    return this.userService.findFirst({ ...args });
-  }
-
-  @Mutation(_returns => User)
-  editUser(@Args() args: UserEditArgs): Observable<UserDto> {
-    return this.userService.update({
-      ...args,
-    });
+  findMe(@AuthSession() session: UserSession) {
+    return this.userService.findMe(session.uid);
   }
 }
