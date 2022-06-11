@@ -1,8 +1,8 @@
-version: '3.7'
+version: 3.7
 services:
   birthdayapp_development_postgres:
-    container_name: 'birthdayapp_development_postgres'
-    image: 'postgres'
+    container_name: birthdayapp_development_postgres
+    image: postgres
     restart: always
     env_file:
       - .development.env
@@ -16,6 +16,15 @@ services:
       - /home/birthdayapp_development_postgres/docker_data/db-data/development:/var/lib/postgresql/data
       - ./scripts/postgres:/docker-entrypoint-initdb.d
 
+  birthdayapp_development_migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile.migrate
+    depends_on:
+      - birthdayapp_development_postgres
+    links:
+      - birthdayapp_development_postgres
+
   birthdayapp_development_gateway:
     env_file:
       - .development.env
@@ -23,3 +32,7 @@ services:
     restart: always
     ports:
       - '127.0.0.1:${GATEWAY_PORT}:${GATEWAY_PORT}'
+    depends_on:
+      - birthdayapp_development_postgres
+    links:
+      - birthdayapp_development_postgres
