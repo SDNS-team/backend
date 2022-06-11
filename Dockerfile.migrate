@@ -3,6 +3,6 @@ FROM --platform=linux/amd64 node:lts-alpine
 WORKDIR /migrate
 COPY ./apps/gateway/prisma ./prisma/
 COPY .development.env .env
-RUN npm install --production prisma -D
+RUN npm install --omit=dev prisma -D
 
 CMD npx prisma migrate deploy --schema=./prisma/schema.prisma

@@ -1,4 +1,4 @@
-version: 3.7
+version: '3.7'
 services:
   birthdayapp_development_postgres:
     container_name: birthdayapp_development_postgres
