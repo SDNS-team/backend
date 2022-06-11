@@ -6,6 +6,7 @@ import { MicroserviceName } from '../common/enums/microservice-name.enum';
 import { FriendModule } from '../friend/friend.module';
 import { FriendService } from '../friend/friend.service';
 import { UserModule } from '../user/user.module';
+import { NoteQueryService } from './note-query.service';
 import { NoteResolver } from './note.resolver';
 import { NoteService } from './note.service';
 
@@ -22,7 +23,7 @@ import { NoteService } from './note.service';
       },
     ]),
   ],
-  providers: [NoteService, NoteResolver, FriendService],
-  exports: [ClientsModule, NoteService],
+  providers: [NoteService, NoteResolver, FriendService, NoteQueryService],
+  exports: [ClientsModule, NoteService, NoteQueryService],
 })
 export class NoteModule {}

@@ -1,16 +1,13 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, ID, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class FriendCreateInput {
-  @Field(_type => String, { nullable: false })
+  @Field(_type => ID)
   name!: string;
 
-  @Field(_type => Date, { nullable: false })
+  @Field(_type => GraphQLISODateTime)
   birthday!: Date;
 
   @Field(_type => String, { nullable: true })
   description?: string;
-
-  @Field(_type => String, { nullable: false })
-  userId!: string;
 }

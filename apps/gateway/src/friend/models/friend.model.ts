@@ -1,5 +1,4 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Note } from '../../note/models';
 
 @ObjectType()
 export class Friend {
@@ -23,7 +22,4 @@ export class Friend {
 
   @Field(_type => String, { nullable: true })
   description!: string | null;
-
-  @Field(_type => [Note], { nullable: true })
-  notes!: Note[] | null;
 }

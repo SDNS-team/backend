@@ -1,62 +1,51 @@
-import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { Prisma } from '@prisma/client/generated/note';
-import { plainToClass } from 'class-transformer';
-import { catchError, map, mergeMap, Observable, throwError, throwIfEmpty, timeout } from 'rxjs';
-import { MicroserviceName } from '../common/enums/microservice-name.enum';
-import { FriendService } from '../friend/friend.service';
+import { Injectable } from '@nestjs/common';
+import { firstValueFrom, mergeMap, Observable } from 'rxjs';
+import { UserSession } from '../common/interfaces/user-session.interface';
+import { FriendQueryService } from '../friend/friend-query.service';
 import { NoteDto } from './dtos/note.dto';
-import { Note, NoteCreateArgs, NoteFindManyArgs, NoteRemoveArgs } from './models';
-
-import NoteFindFirstArgs = Prisma.NoteFindFirstArgs;
+import { NoteCreateArgs, NoteRemoveArgs } from './models';
+import { NoteQueryService } from './note-query.service';
 
 @Injectable()
 export class NoteService {
-  constructor(@Inject(MicroserviceName.NOTE_PACKAGE) private readonly client: ClientProxy, private readonly friendService: FriendService) {}
+  constructor(private readonly friendQueryService: FriendQueryService, private readonly noteQueryService: NoteQueryService) {}
 
-  findFirst(args: NoteFindFirstArgs): Observable<NoteDto> {
-    return this.client.send<Note>({ cmd: 'findFirst' }, args).pipe(
-      timeout(5000),
-      catchError(error => throwError(() => new ForbiddenException(error.message))),
-      throwIfEmpty(() => new NotFoundException('Note not found')),
-      map(friend => plainToClass(NoteDto, friend)),
-    );
-  }
-
-  findMany(args: NoteFindManyArgs): Observable<NoteDto[]> {
-    return this.client.send<Note[]>({ cmd: 'findMany' }, args).pipe(
-      timeout(5000),
-      catchError(error => throwError(() => new ForbiddenException(error.message))),
-      map(notes => plainToClass(NoteDto, notes)),
-    );
-  }
-
-  create(args: NoteCreateArgs): Observable<NoteDto> {
-    return this.friendService
+  create(args: NoteCreateArgs, session: UserSession): Observable<NoteDto> {
+    return this.friendQueryService
       .findFirst({
         where: {
           id: args.data.friendId,
+          userId: session.uid,
+        },
+      })
+      .pipe(mergeMap(() => this.noteQueryService.create(args)));
+  }
+
+  async remove(args: NoteRemoveArgs, session: UserSession): Promise<Observable<boolean>> {
+    const note = await firstValueFrom(
+      this.noteQueryService.findFirst({
+        where: {
+          id: args.where.id,
+        },
+      }),
+    );
+
+    return this.friendQueryService
+      .findFirst({
+        select: { id: true },
+        where: {
+          userId: session.uid,
+          id: note.friendId,
         },
       })
       .pipe(
         mergeMap(() =>
-          this.client.send<Note>({ cmd: 'create' }, args).pipe(
-            timeout(5000),
-            catchError(error => throwError(() => new ForbiddenException(error.message))),
-            map(note => plainToClass(NoteDto, note)),
-          ),
+          this.noteQueryService.delete({
+            where: {
+              id: note.id,
+            },
+          }),
         ),
       );
-  }
-
-  remove(args: NoteRemoveArgs): Observable<boolean> {
-    return this.findFirst(args).pipe(
-      mergeMap(() =>
-        this.client.send<boolean>({ cmd: 'delete' }, args).pipe(
-          timeout(5000),
-          catchError(error => throwError(() => new ForbiddenException(error.message))),
-        ),
-      ),
-    );
   }
 }

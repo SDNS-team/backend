@@ -3,9 +3,9 @@ import { FriendEditInput, FriendWhereUniqueInput } from '.';
 
 @ArgsType()
 export class FriendEditArgs {
-  @Field(_type => FriendEditInput, { nullable: false })
+  @Field(_type => FriendEditInput)
   data!: FriendEditInput;
 
-  @Field(_type => FriendWhereUniqueInput, { nullable: false })
+  @Field(_type => FriendWhereUniqueInput)
   where!: FriendWhereUniqueInput;
 }

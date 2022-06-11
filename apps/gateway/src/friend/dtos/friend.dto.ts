@@ -1,6 +1,7 @@
+import { Friend } from '@prisma/client/generated/friend';
 import { Type } from 'class-transformer';
 
-export class FriendDto {
+export class FriendDto implements Friend {
   id: string;
 
   @Type(_is => Date)
@@ -16,5 +17,7 @@ export class FriendDto {
   @Type(_is => Date)
   birthday: Date;
 
-  description?: string;
+  description: string | null;
+
+  userId: string;
 }

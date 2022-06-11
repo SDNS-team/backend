@@ -1,10 +1,9 @@
+import { ApolloDriverConfig } from '@nestjs/apollo';
 import { Injectable } from '@nestjs/common';
-import { GqlModuleOptions } from '@nestjs/graphql';
 import { JwtModuleOptions, JwtSignOptions } from '@nestjs/jwt';
 import { TcpClientOptions, Transport } from '@nestjs/microservices';
 import * as dotenv from 'dotenv';
 import { get } from 'env-var';
-import { GraphQLError } from 'graphql';
 import { ClientOptions as MinioClientOptions } from 'minio';
 import { ExtractJwt, StrategyOptions } from 'passport-jwt';
 import * as path from 'path';
@@ -98,13 +97,12 @@ export class ConfigService {
     };
   }
 
-  get gqlOptions(): GqlModuleOptions {
+  get gqlOptions(): ApolloDriverConfig {
     return {
       debug: true,
       playground: true,
       disableHealthCheck: true,
       autoSchemaFile: join(__dirname, 'src/schema.gql'),
-      formatError: (error: GraphQLError) => error.extensions?.response,
     };
   }
 

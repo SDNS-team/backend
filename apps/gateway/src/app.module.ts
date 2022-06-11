@@ -1,3 +1,4 @@
+import { ApolloDriver } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AuthModule } from './auth/auth.module';
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
     AvatarUploadModule,
     MinioClientModule,
     GraphQLModule.forRootAsync({
+      driver: ApolloDriver,
       useFactory: (configService: ConfigService) => configService.gqlOptions,
       inject: [ConfigService],
       imports: [ConfigModule],

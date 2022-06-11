@@ -3,6 +3,6 @@ import { NoteCreateInput } from '.';
 
 @ArgsType()
 export class NoteCreateArgs {
-  @Field(_type => NoteCreateInput, { nullable: false })
+  @Field(_type => NoteCreateInput)
   data!: NoteCreateInput;
 }

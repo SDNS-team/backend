@@ -1,92 +1,56 @@
-import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { Prisma } from '@prisma/client/generated/friend';
-import { plainToClass } from 'class-transformer';
-import { catchError, map, mergeMap, Observable, throwError, throwIfEmpty, timeout } from 'rxjs';
-import { Session } from '../auth/token/types/session.type';
-import { MicroserviceName } from '../common/enums/microservice-name.enum';
-import { UserService } from '../user/user.service';
+import { Injectable } from '@nestjs/common';
+import { mergeMap, Observable } from 'rxjs';
+import { UserSession } from '../common/interfaces/user-session.interface';
 import { FriendDto } from './dtos/friend.dto';
-import { Friend } from './models';
+import { FriendQueryService } from './friend-query.service';
+import { FriendCreateArgs, FriendEditArgs, FriendFindManyArgs, FriendRemoveArgs } from './models';
 
-import FriendFindFirstArgs = Prisma.FriendFindFirstArgs;
-import FriendCreateArgs = Prisma.FriendCreateArgs;
-import FriendUpdateArgs = Prisma.FriendUpdateArgs;
-import FriendFindManyArgs = Prisma.FriendFindManyArgs;
-import FriendDeleteArgs = Prisma.FriendDeleteArgs;
-
-// TODO: поиграться с таймаутами и вынести в конфиг константой
-// TODO: Сделать поиск только по текущему пользователю
 @Injectable()
 export class FriendService {
-  constructor(@Inject(MicroserviceName.FRIEND_PACKAGE) private readonly client: ClientProxy, private readonly userService: UserService) {}
+  constructor(private readonly friendQueryService: FriendQueryService) {}
 
-  findMany(args: FriendFindManyArgs, session: Session): Observable<FriendDto[]> {
-    // TODO: можно ли это написать красивее?
-    const query: FriendFindManyArgs = {
-      ...args,
+  findMany({ where, take, skip, orderBy }: FriendFindManyArgs, session: UserSession): Observable<FriendDto[]> {
+    return this.friendQueryService.findMany({
       where: {
-        ...args.where,
-        userId: session.id,
+        ...where,
+        userId: session.uid,
       },
-    };
-
-    return this.client.send<Friend[]>({ cmd: 'findMany' }, query).pipe(
-      timeout(5000),
-      catchError(error => throwError(() => new ForbiddenException(error.message))),
-      map(friends => plainToClass(FriendDto, friends)),
-    );
+      take,
+      skip,
+      orderBy: {
+        createdAt: orderBy,
+      },
+    });
   }
 
-  findFirst(args: FriendFindFirstArgs): Observable<FriendDto> {
-    return this.client.send<Friend>({ cmd: 'findFirst' }, args).pipe(
-      timeout(5000),
-      catchError(error => throwError(() => new ForbiddenException(error.message))),
-      throwIfEmpty(() => new NotFoundException('Friend not found')),
-      map(friend => plainToClass(FriendDto, friend)),
-    );
+  create(args: FriendCreateArgs, session: UserSession): Observable<FriendDto> {
+    return this.friendQueryService.create({
+      data: {
+        ...args,
+        userId: session.uid,
+      },
+    });
   }
 
-  create(args: FriendCreateArgs): Observable<FriendDto> {
-    return this.userService
-      .findFirst({
+  edit(args: FriendEditArgs, session: UserSession): Observable<FriendDto> {
+    return this.friendQueryService
+      .findMany({
         where: {
-          id: args.data.userId,
+          ...args.where,
+          userId: session.uid,
         },
       })
-      .pipe(
-        mergeMap(() =>
-          this.client.send<Friend>({ cmd: 'create' }, args).pipe(
-            timeout(5000),
-            catchError(error => throwError(() => new ForbiddenException(error.message))),
-            map(friend => plainToClass(FriendDto, friend)),
-          ),
-        ),
-      );
+      .pipe(mergeMap(() => this.friendQueryService.update(args)));
   }
 
-  update(args: FriendUpdateArgs): Observable<FriendDto> {
-    return this.findFirst({
-      where: args.where,
-    }).pipe(
-      mergeMap(() =>
-        this.client.send<Friend>({ cmd: 'update' }, args).pipe(
-          timeout(5000),
-          catchError(error => throwError(() => new ForbiddenException(error.message))),
-          map(friend => plainToClass(FriendDto, friend)),
-        ),
-      ),
-    );
-  }
-
-  remove(args: FriendDeleteArgs): Observable<boolean> {
-    return this.findFirst(args).pipe(
-      mergeMap(() =>
-        this.client.send<boolean>({ cmd: 'delete' }, args).pipe(
-          timeout(5000),
-          catchError(error => throwError(() => new ForbiddenException(error.message))),
-        ),
-      ),
-    );
+  remove(args: FriendRemoveArgs, session: UserSession): Observable<boolean> {
+    return this.friendQueryService
+      .findMany({
+        where: {
+          ...args.where,
+          userId: session.uid,
+        },
+      })
+      .pipe(mergeMap(() => this.friendQueryService.delete(args)));
   }
 }
