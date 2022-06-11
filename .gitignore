@@ -39,6 +39,6 @@ testem.log
 Thumbs.db
 
 # Environment
-.production.env
-.development.env
-.env
+/secrets/*
+*.env
+!.example.env

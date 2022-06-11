@@ -5,6 +5,6 @@
     "resolveJsonModule": true
   },
   "exclude": ["**/*.spec.ts", "**/*.test.ts"],
-  "include": ["**/*.ts", "../../libs/models/friend/friend-create.input.ts"]
+  "include": ["**/*.ts"]
 }
 

@@ -1,14 +1,5 @@
 # Backend
 
-* npx prisma generate --schema=./apps/user/prisma/schema.prisma - сгенерировать типы
-* npx prisma generate --schema=./apps/friend/prisma/schema.prisma
-* npx prisma generate --schema=./apps/note/prisma/schema.prisma
-* npx prisma migrate dev --schema=./apps/user/prisma/schema.prisma - накатить миграцию
-* npx prisma migrate dev --schema=./apps/friend/prisma/schema.prisma
-* npx prisma migrate dev --schema=./apps/note/prisma/schema.prisma
+## Run
+* npm run deploy
 * docker-compose --env-file=.development.env -f docker-compose.development.yml up -d
-
-## Для себя
-
-docker build --platform linux/amd64 --progress=plain -t birthdayapp_development_gateway -f apps/user/Dockerfile .
-nx run-many --target=build --projects=friend,user,gateway --parallel

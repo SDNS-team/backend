@@ -8,8 +8,6 @@
       "options": {
         "commands": [
           "nx build gateway",
-          "npx prisma generate --schema=./apps/friend/prisma/schema.prisma",
-          "npx prisma generate --schema=./apps/user/prisma/schema.prisma",
           "docker build --platform linux/amd64 --no-cache --progress=plain -t birthdayapp_development_gateway -f ./apps/gateway/Dockerfile ."
         ],
         "parallel": false

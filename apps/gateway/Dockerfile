@@ -2,10 +2,9 @@ FROM node:lts-alpine
 
 WORKDIR /app
 COPY ./dist/apps/gateway .
-COPY ./package.json .
+COPY ./apps/gateway/prisma ./prisma/
+COPY ./package*.json .
 RUN npm install --production
-RUN npm install reflect-metadata tslib rxjs @nestjs/platform-express
-COPY ./node_modules/@prisma/client/generated/user ./node_modules/@prisma/client/generated/user
-COPY ./node_modules/@prisma/client/generated/friend ./node_modules/@prisma/client/generated/friend
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 CMD node ./main.js

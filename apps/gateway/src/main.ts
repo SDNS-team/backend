@@ -2,7 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import admin, { credential } from 'firebase-admin';
-import * as serviceAccount from '../../../serviceAccountKey.json';
+import * as serviceAccount from '../../../secrets/serviceAccountKey.json';
 import { AppModule } from './app.module';
 import { ConfigService } from './common/configs/config.service';
 
